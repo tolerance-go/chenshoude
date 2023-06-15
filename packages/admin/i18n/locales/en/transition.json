@@ -1,0 +1,46 @@
+{
+   "adminTitle": "huima admin",
+   "adminDesc": "Translate designs into development-ready code at lightning speed",
+   "actions": {
+      "copySuccessful": "Copy Successful",
+      "update": "Update",
+      "updateSuccessful": "Update Successful"
+   },
+   "auth": {
+      "title": "Huima Admin",
+      "loginFormTitle": "Log in to your account",
+      "emailLabel": "Email",
+      "accountLabel": "Username or Email",
+      "accountErrorMessages": {
+         "required": "Username or Email is required"
+      },
+      "accountPlaceholder": "Enter Username or Email",
+      "emailPlaceholder": "Enter Email",
+      "passwordPlaceholder": "Enter Password",
+      "emailErrorMessages": {
+         "required": "Email is required"
+      },
+      "passwordErrorMessages": {
+         "required": "Password is required",
+         "minLength": "Password must be at least 6 characters"
+      },
+      "passwordLabel": "Password",
+      "forgetPassword": "Forget password?",
+      "loginButton": "Log in",
+      "needAccount": "Need an account?",
+      "createAccount": "Create an account",
+      "copyRight": "© Huima {{year}} - All Rights Reserved",
+      "registerFormTitle": "Register a new account",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Enter Confirm Password",
+      "confirmPasswordErrorMessages": {
+         "required": "Confirm Password is required",
+         "minLength": "Confirm Password must be at least 6 characters",
+         "notMatch": "Confirm Password must match Password"
+      },
+      "registerButton": "Register",
+      "registerSuccess": "Registration successful?",
+      "backToLogin": "Back to Login",
+      "registerSuccessNote": "Registration is successful, please activate the account via email before logging in."
+   }
+}

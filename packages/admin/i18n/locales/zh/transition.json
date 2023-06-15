@@ -1,0 +1,46 @@
+{
+   "adminTitle": "绘码后台管理",
+   "adminDesc": "将设计极速导出为开发可用的代码",
+   "actions": {
+      "copySuccessful": "复制成功",
+      "update": "更新",
+      "updateSuccessful": "更新成功"
+   },
+   "auth": {
+      "title": "绘码管理后台",
+      "loginFormTitle": "登录到您的账号",
+      "accountLabel": "用户名/邮箱",
+      "accountErrorMessages": {
+         "required": "用户名/邮箱是必填项"
+      },
+      "accountPlaceholder": "请输入用户名/邮箱",
+      "emailLabel": "邮箱",
+      "passwordLabel": "密码",
+      "emailPlaceholder": "请输入邮箱",
+      "passwordPlaceholder": "请输入密码",
+      "forgetPassword": "忘记密码？",
+      "emailErrorMessages": {
+         "required": "邮箱是必填项"
+      },
+      "passwordErrorMessages": {
+         "required": "密码是必填项",
+         "minLength": "密码长度不能小于 6 位"
+      },
+      "loginButton": "登 录",
+      "needAccount": "需要账号？",
+      "createAccount": "创建账号",
+      "copyRight": "© 绘码 {{year}} - 保留所有权利",
+      "registerFormTitle": "创建您的账号",
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "请再次输入密码",
+      "confirmPasswordErrorMessages": {
+         "required": "确认密码是必填项",
+         "minLength": "密码长度不能小于 6 位",
+         "notMatch": "两次输入的密码不一致"
+      },
+      "registerButton": "注 册",
+      "registerSuccess": "已有账号？",
+      "backToLogin": "返回登录",
+      "registerSuccessNote": "注册成功，请前往邮箱激活账号后登录"
+   }
+}

@@ -1,0 +1,13 @@
+// tsconfig.json
+{
+   "compilerOptions": {
+      "target": "ES5",
+      "lib": ["es6"],
+      "strict": true,
+      "outDir": "./dist",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "declaration": true
+   },
+   "include": ["src/**/*.ts", "test/**/*.ts"]
+}

@@ -1,0 +1,13 @@
+{
+   "hi": "你好, Huima!",
+   "register": "注册",
+   "emailConfirmationSent": "确认邮件已发送！",
+   "emailConfirmation": "邮件确认",
+   "emailConfirmationClick": "请点击以下链接确认你的邮件：",
+   "errorSendingEmail": "发送邮件出错",
+   "emailConfirmed": "邮件已确认！",
+   "loginFailed": "登录失败！",
+   "invalidToken": "无效的令牌",
+   "userNotFound": "找不到用户",
+   "emailExists": "邮箱已存在"
+}

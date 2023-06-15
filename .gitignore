@@ -1,0 +1,21 @@
+# Node
+*.log
+*.log.*
+node_modules
+
+out
+dist
+.env
+
+.DS_Store
+
+figma-plugin/code.js
+figma-plugin/ui.html
+figma-plugin/code.js.LICENSE.txt
+figma-plugin/ui.js.LICENSE.txt
+
+jssj-plugin/code.js
+jssj-plugin/ui.html
+jssj-plugin/code.js.LICENSE.txt
+jssj-plugin/ui.js.LICENSE.txt
+

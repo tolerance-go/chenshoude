@@ -1,0 +1,13 @@
+{
+   "hi": "Hello, Huima!",
+   "register": "Register",
+   "emailConfirmationSent": "Confirmation email sent!",
+   "emailConfirmation": "Email Confirmation",
+   "emailConfirmationClick": "Please confirm your email by clicking on the following link: ",
+   "errorSendingEmail": "Error sending email",
+   "emailConfirmed": "Email confirmed!",
+   "loginFailed": "Login fail!",
+   "invalidToken": "Invalid token",
+   "userNotFound": "User not found",
+   "emailExists": "Email already exists"
+}

@@ -1,0 +1,26 @@
+{
+   "name": "@chenshoude-admin/encrypt-password",
+   "version": "1.0.0",
+   "description": "",
+   "keywords": [],
+   "license": "ISC",
+   "author": "",
+   "main": "dist/index.js",
+   "scripts": {
+      "build": "npm run clean && tsc -p tsconfig.build.json",
+      "clean": "rimraf dist",
+      "dev": "npm run build -- --watch",
+      "test": "vitest"
+   },
+   "dependencies": {
+      "crypto-js": "^4.1.1"
+   },
+   "devDependencies": {
+      "@types/crypto-js": "^4.1.1",
+      "typescript": "5.0.4",
+      "vitest": "^0.31.1"
+   },
+   "engines": {
+      "node": ">=16.0.0"
+   }
+}

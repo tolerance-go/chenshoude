@@ -1,0 +1,14 @@
+{
+   "compilerOptions": {
+      "target": "ES5", // 指定 ECMAScript 目标版本，编译后的代码将符合 ES2018 标准
+      "module": "commonjs", // 指定生成的模块使用 CommonJS 规范
+      "lib": ["ES2020"], // 在编译过程中，包含 ES2020 标准库的类型定义
+      "strict": true, // 启用所有严格类型检查选项
+      "esModuleInterop": true, // 为了支持 default import 形式，启用 CommonJS 和 ES 模块之间的互操作性
+      "outDir": "./dist", // 指定编译后的文件输出目录
+      "rootDir": "./src", // 指定编译的根目录，源文件需在此目录下
+      "declaration": true // 生成对应的 .d.ts 文件
+   },
+   "include": ["src/**/*.ts"], // 指定编译器应包含的文件，这里是 src 目录下所有的 .ts 文件
+   "exclude": ["node_modules"] // 指定编译器应排除的文件，通常我们不需要编译 node_modules
+}

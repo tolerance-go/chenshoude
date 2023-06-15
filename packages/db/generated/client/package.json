@@ -1,0 +1,7 @@
+{
+   "name": ".prisma/client",
+   "sideEffects": false,
+   "main": "index.js",
+   "browser": "index-browser.js",
+   "types": "index.d.ts"
+}

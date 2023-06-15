@@ -1,0 +1,17 @@
+{
+   "compilerOptions": {
+      "target": "ES5",
+      "module": "commonjs",
+      "strict": true,
+      "esModuleInterop": true,
+      "outDir": "./dist",
+      "rootDir": "./src",
+      "moduleResolution": "node"
+   },
+   "include": [
+      "src/**/*.ts",
+      "test/**/*.ts",
+      "../common/src/utils/encryptPassword.ts"
+   ],
+   "exclude": ["node_modules"]
+}

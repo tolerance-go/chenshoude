@@ -1,0 +1,24 @@
+{
+   "name": "@chenshoude-admin/db",
+   "version": "1.0.0",
+   "description": "",
+   "keywords": [],
+   "license": "ISC",
+   "author": "",
+   "main": "dist/index.js",
+   "scripts": {
+      "build": "npm run db:gen && npm run clean && tsc",
+      "clean": "rimraf dist",
+      "db:gen": "prisma generate",
+      "db:pull": "prisma db pull",
+      "db:push": "prisma db push"
+   },
+   "devDependencies": {
+      "@prisma/client": "^4.15.0",
+      "prisma": "^4.15.0",
+      "typescript": "5.0.4"
+   },
+   "engines": {
+      "node": ">=16.0.0"
+   }
+}

@@ -1,0 +1,25 @@
+{
+   "name": "@chenshoude-admin/common",
+   "version": "1.0.0",
+   "description": "",
+   "keywords": [],
+   "license": "ISC",
+   "author": "",
+   "scripts": {
+      "build": "npm run clean && tsc -p tsconfig.build.json",
+      "clean": "rimraf dist",
+      "dev": "npm run build -- --watch",
+      "test": "vitest"
+   },
+   "dependencies": {
+      "@chenshoude-admin/encrypt-password": "workspace:^"
+   },
+   "devDependencies": {
+      "@figma/plugin-typings": "^1.64.0",
+      "typescript": "5.0.4",
+      "vitest": "^0.31.1"
+   },
+   "engines": {
+      "node": ">=16.0.0"
+   }
+}
