@@ -21,7 +21,8 @@ export default function Home({ children }: { children: React.ReactNode }) {
                <span className='text-4xl relative top-7 px-2'>”</span>
             </div>
             <div className='text-sm text-gray-400 relative pl-3 top-5'>
-               14 天前
+               小王，<span className='link link-primary'>《天王老子》</span>
+               的作者
             </div>
          </div>
          {/* 主操作 */}
@@ -54,7 +55,7 @@ export default function Home({ children }: { children: React.ReactNode }) {
                            className='w-9 rounded-full absolute z-10 bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2'
                         ></img>
                         <span className='absolute bottom-1 right-1 text-gray-500'>
-                           开发中
+                           连载中
                         </span>
                      </div>
                      <div className='flex flex-col gap-1 mt-4'>
@@ -63,8 +64,13 @@ export default function Home({ children }: { children: React.ReactNode }) {
                            一个浏览器插件，帮你把 bilibili 官
                            网的背景改成自己喜欢的图片
                         </div>
-                        <div className='text-gray-400 text-sm mt-1'>
-                           2024-2-13
+                        <div className='mt-2 flex justify-between items-center'>
+                           <span className='text-gray-400 text-sm'>
+                              玄幻，200万字
+                           </span>
+                           <span className='text-sm text-pink-400'>
+                              1,244人在追
+                           </span>
                         </div>
                      </div>
                   </div>

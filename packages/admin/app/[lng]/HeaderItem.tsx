@@ -31,16 +31,21 @@ export const HeaderItem = () => {
             {/* logo */}
             <div className='flex flex-col items-center justify-center'>
                <h1 className='text-[2.8rem] leading-[3.2rem] transition-all'>
-                  趁手的
+                  创想小说
                </h1>
-               <h4 className='text-xs text-gray-400 transition-all'>
-                  www.chenshoude.com
+               <h4
+                  className='text-xs text-gray-400 transition-all'
+                  style={{
+                     letterSpacing: '0.3rem',
+                  }}
+               >
+                  www.aistory.com
                </h4>
             </div>
             {/* slog */}
             <div>
                <h3 className='inline-flex items-center gap-2'>
-                  <span>1 块钱帮你解决一个小问题</span>{' '}
+                  <span>你的第一本 AI 小说在这里诞生</span>{' '}
                   <img src='/icons/clap.svg' className='w-5'></img>
                </h3>
             </div>

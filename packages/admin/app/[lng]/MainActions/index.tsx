@@ -38,7 +38,7 @@ export const MainActions = () => {
                   }}
                ></input>
             ) : (
-               '碰碰运气'
+               '随便看看'
             )}
             {isChance && (
                <img
