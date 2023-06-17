@@ -1,13 +1,13 @@
 'use client'
 
-import Button from '@/components/Button'
+import AuthModalButton from '@/components/AuthModalButton'
 import { useLanguageContext } from '@/components/LanguageContext'
+import { useTranslation } from '@/i18n/client'
 import request from '@/utils/request'
 import { encryptPassword } from '@chenshoude-admin/encrypt-password'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useTranslation } from '../../../i18n/client'
 
 export const LoginForm = ({
    setIsLogin,
@@ -27,11 +27,12 @@ export const LoginForm = ({
 
    return (
       <>
-         <h1 className='text-xl md:text-2xl font-bold leading-tight mt-6'>
+         <h1 className='text-xl md:text-2xl font-bold leading-tight'>
             {t('auth.loginFormTitle')}
          </h1>
          <form
             onSubmit={handleSubmit(async (data) => {
+               console.log('handleSubmit called') // Add this line
                console.log(data, process.env)
                setIsLoading(true)
                try {
@@ -44,7 +45,8 @@ export const LoginForm = ({
                   })
                   console.log('end')
                   router.push(`/${lng}/admin`)
-               } catch {
+               } catch (error) {
+                  console.log('error', error)
                   // noop
                } finally {
                   setIsLoading(false)
@@ -101,9 +103,9 @@ export const LoginForm = ({
                   {t('auth.forgetPassword')}
                </a>
             </div>
-            <Button className='mt-6' block type='submit' isLoading={isLoading}>
+            <AuthModalButton className='mt-6' type='submit' loading={isLoading}>
                {t('auth.loginButton')}
-            </Button>
+            </AuthModalButton>
          </form>
          <p className='mt-8'>
             {t('auth.needAccount')}{' '}

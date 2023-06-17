@@ -1,6 +1,6 @@
 'use client'
 
-import Button from '@/components/Button'
+import AuthModalButton from '@/components/AuthModalButton'
 import CopyToken from '@/components/CopyToken'
 import { useLanguageContext } from '@/components/LanguageContext'
 import Page from '@/components/Page'
@@ -166,9 +166,14 @@ const SettingsForm = ({ defaultUser }: { defaultUser: User }) => {
          </div>
       </div> */}
          </div>
-         <Button className='mt-6' block type='submit' isLoading={isLoading}>
+         <AuthModalButton
+            className='mt-6'
+            block
+            type='submit'
+            loading={isLoading}
+         >
             {t('actions.update')}
-         </Button>
+         </AuthModalButton>
       </form>
    )
 }

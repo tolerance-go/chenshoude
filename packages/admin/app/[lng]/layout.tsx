@@ -7,6 +7,7 @@ import { Metadata, ResolvingMetadata } from 'next'
 import { useTranslation } from '../../i18n'
 import { fallbackLng, languages } from '../../i18n/settings'
 import { I18nLng } from '../../i18n/types'
+import { AuthWrapper } from './AuthWrapper'
 import { Body } from './Body'
 
 export async function generateMetadata(
@@ -55,11 +56,13 @@ export default async function RootLayout({
 
    return (
       <html lang={lng} dir={dir(lng)} data-theme='light'>
-         <Body lng={lng === 'zh' ? 'zh' : 'en'} dir={dir_}>
-            {children}
-            <GlobalModal />
-            <GlobalToast />
-         </Body>
+         <AuthWrapper>
+            <Body lng={lng === 'zh' ? 'zh' : 'en'} dir={dir_}>
+               {children}
+               <GlobalModal />
+               <GlobalToast />
+            </Body>
+         </AuthWrapper>
       </html>
    )
 }

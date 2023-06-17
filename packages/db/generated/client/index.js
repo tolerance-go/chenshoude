@@ -132,7 +132,7 @@ const config = {
          value: 'prisma-client-js',
       },
       output: {
-         value: '/Users/yarnb/chenshoude/packages/db/generated/client',
+         value: '/Users/yarnb/mictooon/packages/db/generated/client',
          fromEnvVar: null,
       },
       config: {
@@ -158,7 +158,6 @@ const config = {
    datasourceNames: ['db'],
    activeProvider: 'mysql',
    dataProxy: false,
-   postinstall: false,
 }
 
 const fs = require('fs')

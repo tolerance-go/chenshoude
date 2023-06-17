@@ -10,22 +10,7 @@ module.exports = {
       extend: {},
    },
    plugins: [
-      require('@tailwindcss/forms')({
-         strategy: 'class',
-      }),
       require('@tailwindcss/typography'),
       require('@headlessui/tailwindcss'),
-      require('daisyui'),
    ],
-   daisyui: {
-      themes: [
-         {
-            light: {
-               ...require('daisyui/src/theming/themes')['[data-theme=light]'],
-               primary: '#3c81f6',
-            },
-         },
-         'dark',
-      ],
-   },
 }

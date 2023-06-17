@@ -1,6 +1,6 @@
 import { I18nLng } from '@/i18n/types'
+import { AuthWrapper } from '../AuthWrapper'
 import { Aside } from './Aside'
-import { AuthWrapper } from './AuthWrapper'
 import { Header } from './Header'
 
 export default function RootLayout({

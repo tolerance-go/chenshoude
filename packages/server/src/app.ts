@@ -1,3 +1,8 @@
+import { config } from 'dotenv'
+
+// 优先执行
+config()
+
 import { decryptPassword } from '@chenshoude-admin/encrypt-password'
 // 导入 Prisma 的客户端和用户模型
 import prisma, { User as UserType } from '@chenshoude-admin/db'
@@ -17,8 +22,7 @@ import { Request, Response } from 'express'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { authRouter } from './routers/authRouter'
 
-import { config } from 'dotenv'
-import { projectRouter } from './routers/projectRouter'
+// import { projectRouter } from './routers/projectRouter'
 import { registerRouter } from './routers/registerRouter'
 
 import { EXPRESS_SESSION_SID } from '@chenshoude-admin/common/dist/constants'
@@ -28,6 +32,7 @@ import { viewsRouter } from './routers/viewsRouter'
 import { validatePassword } from './utils/hashPassword'
 
 import i18n from 'i18n'
+import { openaiRouter } from './routers/openaiRouter'
 
 i18n.configure({
    locales: ['en', 'zh'],
@@ -36,8 +41,6 @@ i18n.configure({
    autoReload: true,
    cookie: 'i18n_lng',
 })
-
-config()
 
 declare global {
    namespace Express {
@@ -149,7 +152,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 // 使用 '/api' 作为路由的前缀
 
-app.use('/api', authRouter, projectRouter, registerRouter)
+app.use('/api', authRouter, registerRouter, openaiRouter)
 app.use(viewsRouter)
 
 app.get('/', (req, res) => res.send(req.__('hi')))

@@ -28,4 +28,8 @@
    .underline-dot {
       text-decoration-style: dotted;
    }
+
+   .link {
+      @apply text-blue-500;
+   }
 }

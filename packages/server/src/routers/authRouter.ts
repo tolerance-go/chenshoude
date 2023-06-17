@@ -83,10 +83,11 @@ authRouter.delete(
 authRouter.get(
    '/users/session',
    catchErrors(async (req, res) => {
-      if (!req.user) {
-         throw new Error('No session found')
+      if (req.user) {
+         res.json(req.user)
+         return
       }
-      res.json(req.user)
+      res.json(null)
    }),
 )
 

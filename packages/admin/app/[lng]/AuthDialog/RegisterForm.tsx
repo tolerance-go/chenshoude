@@ -1,6 +1,6 @@
 'use client'
 
-import Button from '@/components/Button'
+import AuthModalButton from '@/components/AuthModalButton'
 import { useLanguageContext } from '@/components/LanguageContext'
 import request from '@/utils/request'
 import { encryptPassword } from '@chenshoude-admin/encrypt-password'
@@ -25,11 +25,12 @@ export const RegisterForm = ({
 
    return (
       <>
-         <h1 className='text-xl md:text-2xl font-bold leading-tight mt-6'>
+         <h1 className='text-xl md:text-2xl font-bold leading-tight'>
             {t('auth.registerFormTitle')}
          </h1>
          <form
             onSubmit={handleSubmit(async (data) => {
+               debugger
                setIsLoading(true)
                const { confirmPassword, ...rest } = data
                try {
@@ -122,9 +123,9 @@ export const RegisterForm = ({
                   </p>
                )}
             </div>
-            <Button className='mt-6' block type='submit' isLoading={isLoading}>
+            <AuthModalButton className='mt-6' type='submit' loading={isLoading}>
                {t('auth.registerButton')}
-            </Button>
+            </AuthModalButton>
             <p className='mt-8'>
                {t('auth.registerSuccess')}{' '}
                <span

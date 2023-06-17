@@ -25,7 +25,7 @@ export const HeaderItem = () => {
    return (
       <div
          id='header'
-         className='flex items-center justify-between min-h-[4.5rem] bg-white z-50'
+         className='flex items-center justify-between min-h-[4.5rem] bg-white z-10'
       >
          <div className='flex items-center gap-8'>
             {/* logo */}

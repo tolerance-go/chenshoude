@@ -73,7 +73,7 @@ export default function Home({
                         </span>
                      </div>
                      <div className='flex flex-col gap-1 mt-4'>
-                        <h4 className='text-2xl leading-8 group-hover:link-primary'>
+                        <h4 className='text-2xl leading-8 group-hover:link'>
                            bilibili-bg
                         </h4>
                         <div className='text-gray-500 mt-1'>

@@ -7,7 +7,6 @@ import {
    ReactNode,
    cloneElement,
    forwardRef,
-   useEffect,
    useImperativeHandle,
    useRef,
    useState,
@@ -18,9 +17,9 @@ export interface ModalProps {
    title?: string
    children?: ReactNode
    trigger?: ReactElement
-   autoCloseTime?: number
    closable?: boolean
    onClose?: () => void
+   windowKey?: string
 }
 
 function isElementChild(container: HTMLElement, target: HTMLElement): boolean {
@@ -42,10 +41,7 @@ export interface ModalHandles {
 }
 
 const Modal = forwardRef<ModalHandles, ModalProps>(
-   (
-      { children, title, trigger, autoCloseTime, onClose, closable = true },
-      ref,
-   ) => {
+   ({ children, title, trigger, onClose, closable = true, windowKey }, ref) => {
       let [isOpen, setIsOpen] = useState(false)
       const latestOnClose = useLatest(onClose)
 
@@ -58,20 +54,20 @@ const Modal = forwardRef<ModalHandles, ModalProps>(
       function openModal() {
          setIsOpen(true)
       }
-
-      useImperativeHandle(ref, () => ({
+      const methods = {
          openModal,
          closeModal,
-      }))
+      }
 
-      useEffect(() => {
-         if (isOpen && autoCloseTime) {
-            const timeoutId = setTimeout(() => {
-               closeModal()
-            }, autoCloseTime)
-            return () => clearTimeout(timeoutId)
-         }
-      }, [isOpen, autoCloseTime])
+      // 如果 windowKey 存在，将 ref 挂载到 window 上
+      if (windowKey && typeof window !== 'undefined') {
+         // @ts-ignore
+         window[windowKey] = methods
+      }
+
+      useImperativeHandle(ref, () => {
+         return methods
+      })
 
       return (
          <>
@@ -94,7 +90,7 @@ const Modal = forwardRef<ModalHandles, ModalProps>(
                <Dialog
                   ref={containerRef}
                   as='div'
-                  className='relative z-10'
+                  className='relative z-50'
                   // https://github.com/tailwindlabs/headlessui/issues/621
                   onClose={() => {}}
                   onClick={(event) => {
@@ -140,7 +136,7 @@ const Modal = forwardRef<ModalHandles, ModalProps>(
                                     onClick={(event) => {
                                        closeModal()
                                     }}
-                                    className='top-0 absolute right-0 p-4'
+                                    className='top-0 absolute right-0 p-4 outline-none'
                                  >
                                     <svg
                                        xmlns='http://www.w3.org/2000/svg'
