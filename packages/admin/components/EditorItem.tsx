@@ -8,8 +8,10 @@ import './EditorItem.scss'
 type EditorItemProps = {
    defaultText: string
    maxWidth?: string
-   className: string
+   className?: string
    maxLines?: number // 添加行数限制属性
+   inputMaxWidth?: string
+   inputMaxLength?: number
 }
 
 const EditorItem: React.FC<EditorItemProps> = ({
@@ -17,6 +19,8 @@ const EditorItem: React.FC<EditorItemProps> = ({
    maxWidth,
    className,
    maxLines,
+   inputMaxWidth,
+   inputMaxLength,
 }) => {
    const [text, setText] = useState(defaultText)
    const [editing, setEditing] = useState(false)
@@ -65,7 +69,7 @@ const EditorItem: React.FC<EditorItemProps> = ({
             !editing && ['underline-dot', 'underline', 'underline-offset-4'],
          )}
          style={{
-            maxWidth: editing ? undefined : maxWidth,
+            maxWidth: editing ? inputMaxWidth : maxWidth,
             ...(maxLines
                ? {
                     WebkitLineClamp: editing ? undefined : maxLines,
@@ -76,15 +80,34 @@ const EditorItem: React.FC<EditorItemProps> = ({
          disabled={!editing} // use true to disable edition
          onChange={(event) => {
             const target = event.target
-            setText(target.value)
+
+            if (inputMaxLength ? target.value.length <= inputMaxLength : true) {
+               // 确保新文本的长度不超过inputMaxLength
+               setText(target.value)
+            }
          }} // handle innerHTML change
          onKeyDown={(event) => {
+            if (maxLines && event.altKey && event.key === 'Enter') {
+               // 创建一个新的HTML <br>元素
+               const br = document.createElement('br')
+               // 获取当前选中的范围
+               const selection = window.getSelection()
+               if (selection?.rangeCount) {
+                  const range = selection.getRangeAt(0)
+                  // 在当前光标位置插入新的HTML <br>元素
+                  range.insertNode(br)
+                  // 移动光标到新元素后面
+                  range.setStartAfter(br)
+                  range.setEndAfter(br)
+                  selection.removeAllRanges()
+                  selection.addRange(range)
+                  event.preventDefault() // 阻止默认行为，这样按下Enter不会触发其他动作（比如提交表单）
+               }
+               return
+            }
+
             //    const target = event.target as HTMLInputElement
-            if (
-               maxLines
-                  ? event.altKey && event.key === 'Enter'
-                  : event.key === 'Enter'
-            ) {
+            if (event.key === 'Enter') {
                finishEditing()
             }
          }}
