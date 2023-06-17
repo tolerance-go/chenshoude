@@ -15,4 +15,17 @@
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
    }
+
+   .truncate-multiline {
+      display: -webkit-box;
+      -webkit-line-clamp: 2; /* 控制行数，改为你需要的行数 */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: pre-wrap;
+   }
+
+   .underline-dot {
+      text-decoration-style: dotted;
+   }
 }

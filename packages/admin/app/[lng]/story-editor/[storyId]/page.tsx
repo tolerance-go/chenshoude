@@ -45,7 +45,7 @@ export default function StoryEditor() {
                   </div>
                   <div className='text-sm'>130万字</div>
                </div>
-               <div className='mt-2'>
+               <div className='mt-2 relative'>
                   <DescEditor />
                </div>
             </div>

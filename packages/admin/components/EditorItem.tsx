@@ -3,18 +3,16 @@
 import clsx from 'clsx'
 import { useEffect, useRef, useState } from 'react'
 import ContentEditable from 'react-contenteditable'
-import PencilOutlineIcon from './icons/PencilOutlineIcon'
+import './EditorItem.scss'
 
 type EditorItemProps = {
    defaultText: string
-   maxWidth: string
-   iconClassName: string
+   maxWidth?: string
    className: string
-   maxLines: number // 添加行数限制属性
+   maxLines?: number // 添加行数限制属性
 }
 
 const EditorItem: React.FC<EditorItemProps> = ({
-   iconClassName,
    defaultText,
    maxWidth,
    className,
@@ -54,52 +52,49 @@ const EditorItem: React.FC<EditorItemProps> = ({
    }, [editing])
 
    return (
-      <>
-         <ContentEditable
-            innerRef={contentEditableRef}
-            className={clsx(
-               'inline-block',
-               editing ? 'w-full' : 'truncate',
-               className,
-            )}
-            style={{
-               maxWidth: editing ? undefined : maxWidth,
-               // 添加以下样式来支持换行和行数限制
-               //    whiteSpace: 'pre-wrap',
-               //    display: '-webkit-box',
-               //    WebkitBoxOrient: 'vertical',
-               //    WebkitLineClamp: editing ? 'none' : maxLines,
-               //    overflow: 'hidden',
-            }}
-            tagName='span'
-            html={text} // innerHTML of the editable div
-            disabled={!editing} // use true to disable edition
-            onChange={(event) => {
-               const target = event.target
-               setText(target.value)
-            }} // handle innerHTML change
-            onKeyDown={(event) => {
-               //    const target = event.target as HTMLInputElement
-               if (event.key === 'Enter') {
-                  finishEditing()
-               }
-            }}
-            onBlur={() => {
-               cancelEditing()
-            }}
-            onClick={() => {
-               startEditing()
-            }}
-         />
-         {!editing && (
-            <PencilOutlineIcon
-               className={clsx('inline align-baseline', iconClassName)}
-               onClick={() => {
-                  startEditing()
-               }}
-            />
+      <ContentEditable
+         tagName='div'
+         innerRef={contentEditableRef}
+         className={clsx(
+            editing
+               ? 'w-full outline-none'
+               : maxLines
+               ? 'truncate-multiline'
+               : 'truncate',
+            className,
+            !editing && ['underline-dot', 'underline', 'underline-offset-4'],
          )}
-      </>
+         style={{
+            maxWidth: editing ? undefined : maxWidth,
+            ...(maxLines
+               ? {
+                    WebkitLineClamp: editing ? undefined : maxLines,
+                 }
+               : undefined),
+         }}
+         html={text} // innerHTML of the editable div
+         disabled={!editing} // use true to disable edition
+         onChange={(event) => {
+            const target = event.target
+            setText(target.value)
+         }} // handle innerHTML change
+         onKeyDown={(event) => {
+            //    const target = event.target as HTMLInputElement
+            if (
+               maxLines
+                  ? event.altKey && event.key === 'Enter'
+                  : event.key === 'Enter'
+            ) {
+               finishEditing()
+            }
+         }}
+         onBlur={() => {
+            cancelEditing()
+         }}
+         onClick={() => {
+            startEditing()
+         }}
+      />
    )
 }
 
