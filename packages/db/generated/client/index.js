@@ -132,7 +132,7 @@ const config = {
          value: 'prisma-client-js',
       },
       output: {
-         value: '/Users/yarnb/huima/huima-admin/packages/db/generated/client',
+         value: '/Users/yarnb/chenshoude/packages/db/generated/client',
          fromEnvVar: null,
       },
       config: {

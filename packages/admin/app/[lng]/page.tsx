@@ -1,9 +1,19 @@
+import Flowers from '@/components/Flowers'
+import Link from 'next/link'
 import { AuthDialog } from './AuthDialog'
 import { HeaderItem } from './HeaderItem'
 import { MainActions } from './MainActions'
 import { UserWantTyped } from './UserWantTyped'
 
-export default function Home({ children }: { children: React.ReactNode }) {
+export default function Home({
+   children,
+   params: { lng },
+}: {
+   children: React.ReactNode
+   params: {
+      lng: string
+   }
+}) {
    return (
       <div className='px-20 py-10 pb-48'>
          <AuthDialog />
@@ -47,7 +57,11 @@ export default function Home({ children }: { children: React.ReactNode }) {
                },
             ].map((item, index) => {
                return (
-                  <div key={item.id} className='flex flex-col'>
+                  <Link
+                     href={`/${lng}/story/${item.id}`}
+                     key={item.id}
+                     className='flex flex-col group hover:cursor-pointer'
+                  >
                      <div className='h-40 relative'>
                         <img className='bg-gray-300 w-full h-full block'></img>
                         <img
@@ -59,7 +73,9 @@ export default function Home({ children }: { children: React.ReactNode }) {
                         </span>
                      </div>
                      <div className='flex flex-col gap-1 mt-4'>
-                        <h4 className='text-2xl leading-8'>bilibili-bg</h4>
+                        <h4 className='text-2xl leading-8 group-hover:link-primary'>
+                           bilibili-bg
+                        </h4>
                         <div className='text-gray-500 mt-1'>
                            一个浏览器插件，帮你把 bilibili 官
                            网的背景改成自己喜欢的图片
@@ -68,12 +84,10 @@ export default function Home({ children }: { children: React.ReactNode }) {
                            <span className='text-gray-400 text-sm'>
                               玄幻，200万字
                            </span>
-                           <span className='text-sm text-pink-400'>
-                              1,244人在追
-                           </span>
+                           <Flowers />
                         </div>
                      </div>
-                  </div>
+                  </Link>
                )
             })}
          </div>

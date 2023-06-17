@@ -13,6 +13,7 @@ module.exports = {
       require('@tailwindcss/forms')({
          strategy: 'class',
       }),
+      require('@tailwindcss/typography'),
       require('@headlessui/tailwindcss'),
       require('daisyui'),
    ],
