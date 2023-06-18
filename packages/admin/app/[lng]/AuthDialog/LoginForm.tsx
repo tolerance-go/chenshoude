@@ -32,8 +32,6 @@ export const LoginForm = ({
          </h1>
          <form
             onSubmit={handleSubmit(async (data) => {
-               console.log('handleSubmit called') // Add this line
-               console.log(data, process.env)
                setIsLoading(true)
                try {
                   await request.post('/api/login', {
@@ -60,7 +58,7 @@ export const LoginForm = ({
                </label>
                <input
                   placeholder={t('auth.accountPlaceholder')}
-                  className='w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none'
+                  className='w-full px-4 h-12 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none'
                   autoFocus
                   {...register('account', {
                      required: t('auth.accountErrorMessages.required'),
@@ -78,7 +76,7 @@ export const LoginForm = ({
                <input
                   type='password'
                   placeholder={t('auth.passwordPlaceholder')}
-                  className='w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
+                  className='w-full px-4 h-12 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
     focus:bg-white focus:outline-none'
                   {...register('password', {
                      required: t('auth.passwordErrorMessages.required'),

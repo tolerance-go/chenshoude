@@ -6,6 +6,7 @@
    "license": "ISC",
    "author": "",
    "main": "dist/index.js",
+   "types": "dist/index.d.ts",
    "scripts": {
       "build": "npm run db:gen && npm run clean && tsc",
       "clean": "rimraf dist",

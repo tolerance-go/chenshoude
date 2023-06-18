@@ -83,26 +83,20 @@ Prisma.NullTypes = {
  * Enums
  */
 
-exports.Prisma.JsonNullValueFilter = {
-   DbNull: Prisma.DbNull,
-   JsonNull: Prisma.JsonNull,
-   AnyNull: Prisma.AnyNull,
-}
-
-exports.Prisma.NullableJsonNullValueInput = {
-   DbNull: Prisma.DbNull,
-   JsonNull: Prisma.JsonNull,
-}
-
-exports.Prisma.ProjectScalarFieldEnum = {
+exports.Prisma.ArticleScalarFieldEnum = {
    id: 'id',
    name: 'name',
-   pageHtml: 'pageHtml',
-   nodeData: 'nodeData',
-   settings: 'settings',
    createdAt: 'createdAt',
    updatedAt: 'updatedAt',
    userId: 'userId',
+}
+
+exports.Prisma.ChapterScalarFieldEnum = {
+   id: 'id',
+   name: 'name',
+   createdAt: 'createdAt',
+   updatedAt: 'updatedAt',
+   articleId: 'articleId',
 }
 
 exports.Prisma.SortOrder = {
@@ -119,18 +113,26 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
    id: 'id',
-   email: 'email',
    username: 'username',
    password: 'password',
-   emailToken: 'emailToken',
-   confirmed: 'confirmed',
+   phoneNumber: 'phoneNumber',
+   createdAt: 'createdAt',
+   updatedAt: 'updatedAt',
+}
+
+exports.Prisma.VerificationCodeScalarFieldEnum = {
+   id: 'id',
+   phoneNumber: 'phoneNumber',
+   code: 'code',
    createdAt: 'createdAt',
    updatedAt: 'updatedAt',
 }
 
 exports.Prisma.ModelName = {
    User: 'User',
-   Project: 'Project',
+   VerificationCode: 'VerificationCode',
+   Article: 'Article',
+   Chapter: 'Chapter',
 }
 
 /**

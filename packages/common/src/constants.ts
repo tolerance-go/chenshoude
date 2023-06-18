@@ -1,3 +1,3 @@
-export const I18N_COOKIE_NAME = 'i18n_lng'
+export const I18N_COOKIE_NAME = 'mictooon.lng'
 
-export const EXPRESS_SESSION_SID = 'huima.connect.sid'
+export const EXPRESS_SESSION_SID = 'mictooon.connect.sid'

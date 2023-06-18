@@ -4,10 +4,24 @@ import AuthModalButton from '@/components/AuthModalButton'
 import { useLanguageContext } from '@/components/LanguageContext'
 import request from '@/utils/request'
 import { encryptPassword } from '@chenshoude-admin/encrypt-password'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { useTranslation } from '../../../i18n/client'
+import CountryCodeSelect from './CountryCodeSelect'
+import { SendMsgBtn } from './SendMsgBtn'
+
+function mergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
+   return (value: T) => {
+      refs.forEach((ref) => {
+         if (typeof ref === 'function') {
+            ref(value)
+         } else if (ref != null) {
+            ;(ref as React.MutableRefObject<T>).current = value
+         }
+      })
+   }
+}
 
 export const RegisterForm = ({
    setIsLogin,
@@ -22,6 +36,17 @@ export const RegisterForm = ({
    const [isLoading, setIsLoading] = useState(false)
    const { lng } = useLanguageContext()
    const { t } = useTranslation(lng)
+
+   // 电话号码 input ref
+   const phoneNumberRef = useRef<HTMLInputElement>(null)
+
+   const { ref: phoneRef, ...phoneNumberParams } = register('phoneNumber', {
+      required: '手机号不能为空',
+      pattern: {
+         value: /^\+(?:[0-9]●?){6,14}[0-9]$/,
+         message: '手机号码格式不正确',
+      },
+   })
 
    return (
       <>
@@ -50,37 +75,42 @@ export const RegisterForm = ({
             className='mt-6'
          >
             <div>
-               <label className='block text-gray-700'>
-                  {t('auth.emailLabel')}
-               </label>
-               <input
-                  type='email'
-                  placeholder={t('auth.emailPlaceholder')}
-                  className='w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none'
-                  autoFocus
-                  {...register('email', {
-                     required: t('auth.emailErrorMessages.required'),
-                  })}
-               />
-               {errors.email && (
-                  <p className='pt-1 text-gray-700'>{errors.email.message}</p>
+               <label className='block text-gray-700'>手机号</label>
+               <div className='flex gap-2 mt-2'>
+                  <CountryCodeSelect
+                     onSelected={() => {
+                        phoneNumberRef.current?.focus()
+                     }}
+                  />
+                  <input
+                     ref={mergeRefs(phoneNumberRef, phoneRef)}
+                     type='text'
+                     placeholder={'请输入手机号'}
+                     className='pl-20 h-12 w-full flex-grow px-4 rounded-lg bg-gray-200  border focus:border-blue-500 focus:bg-white focus:outline-none'
+                     autoFocus
+                     {...phoneNumberParams}
+                  />
+                  <SendMsgBtn></SendMsgBtn>
+               </div>
+               {errors.phoneNumber && (
+                  <p className='pt-1 text-gray-700'>
+                     {errors.phoneNumber.message}
+                  </p>
                )}
             </div>
 
             <div className='mt-4'>
-               <label className='block text-gray-700'>
-                  {t('auth.passwordLabel')}
-               </label>
+               <label className='block text-gray-700'>验证码</label>
                <input
-                  type='password'
-                  placeholder={t('auth.passwordPlaceholder')}
-                  className='w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
+                  type='text'
+                  placeholder={'请输入验证码'}
+                  className='w-full px-4 h-12 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
     focus:bg-white focus:outline-none'
-                  {...register('password', {
-                     required: t('auth.passwordErrorMessages.required'),
+                  {...register('code', {
+                     required: '验证码不能为空',
                      minLength: {
                         value: 6,
-                        message: t('auth.passwordErrorMessages.minLength'),
+                        message: '验证码长度不能小于6位',
                      },
                   })}
                />
@@ -91,37 +121,6 @@ export const RegisterForm = ({
                )}
             </div>
 
-            <div className='mt-4'>
-               <label className='block text-gray-700'>
-                  {t('auth.confirmPasswordLabel')}
-               </label>
-               <input
-                  type='password'
-                  placeholder={t('auth.confirmPasswordPlaceholder')}
-                  className='w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
-    focus:bg-white focus:outline-none'
-                  {...register('confirmPassword', {
-                     required: t('auth.confirmPasswordErrorMessages.required'),
-                     minLength: {
-                        value: 6,
-                        message: t(
-                           'auth.confirmPasswordErrorMessages.minLength',
-                        ),
-                     },
-                     validate: (value, formValues) => {
-                        return (
-                           value === formValues.password ||
-                           t('auth.confirmPasswordErrorMessages.notMatch')
-                        )
-                     },
-                  })}
-               />
-               {errors.confirmPassword && (
-                  <p className='pt-1 text-gray-700'>
-                     {errors.confirmPassword.message}
-                  </p>
-               )}
-            </div>
             <AuthModalButton className='mt-6' type='submit' loading={isLoading}>
                {t('auth.registerButton')}
             </AuthModalButton>

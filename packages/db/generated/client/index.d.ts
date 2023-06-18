@@ -20,28 +20,47 @@ export type PrismaPromise<T> = runtime.Types.Public.PrismaPromise<T>
  */
 export type User = {
    id: number
-   email: string
    username: string | null
    password: string
-   emailToken: string
-   confirmed: boolean
+   phoneNumber: string
    createdAt: Date
    updatedAt: Date
 }
 
 /**
- * Model Project
+ * Model VerificationCode
  *
  */
-export type Project = {
+export type VerificationCode = {
+   id: number
+   phoneNumber: string
+   code: string
+   createdAt: Date
+   updatedAt: Date
+}
+
+/**
+ * Model Article
+ *
+ */
+export type Article = {
    id: number
    name: string
-   pageHtml: string | null
-   nodeData: Prisma.JsonValue | null
-   settings: Prisma.JsonValue | null
    createdAt: Date
    updatedAt: Date
    userId: number
+}
+
+/**
+ * Model Chapter
+ *
+ */
+export type Chapter = {
+   id: number
+   name: string
+   createdAt: Date
+   updatedAt: Date
+   articleId: number
 }
 
 /**
@@ -216,14 +235,34 @@ export class PrismaClient<
    get user(): Prisma.UserDelegate<GlobalReject>
 
    /**
-    * `prisma.project`: Exposes CRUD operations for the **Project** model.
+    * `prisma.verificationCode`: Exposes CRUD operations for the **VerificationCode** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Projects
-    * const projects = await prisma.project.findMany()
+    * // Fetch zero or more VerificationCodes
+    * const verificationCodes = await prisma.verificationCode.findMany()
     * ```
     */
-   get project(): Prisma.ProjectDelegate<GlobalReject>
+   get verificationCode(): Prisma.VerificationCodeDelegate<GlobalReject>
+
+   /**
+    * `prisma.article`: Exposes CRUD operations for the **Article** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Articles
+    * const articles = await prisma.article.findMany()
+    * ```
+    */
+   get article(): Prisma.ArticleDelegate<GlobalReject>
+
+   /**
+    * `prisma.chapter`: Exposes CRUD operations for the **Chapter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Chapters
+    * const chapters = await prisma.chapter.findMany()
+    * ```
+    */
+   get chapter(): Prisma.ChapterDelegate<GlobalReject>
 }
 
 export namespace Prisma {
@@ -733,7 +772,9 @@ export namespace Prisma {
 
    export const ModelName: {
       User: 'User'
-      Project: 'Project'
+      VerificationCode: 'VerificationCode'
+      Article: 'Article'
+      Chapter: 'Chapter'
    }
 
    export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -918,11 +959,11 @@ export namespace Prisma {
     */
 
    export type UserCountOutputType = {
-      project: number
+      article: number
    }
 
    export type UserCountOutputTypeSelect = {
-      project?: boolean
+      article?: boolean
    }
 
    export type UserCountOutputTypeGetPayload<
@@ -956,6 +997,50 @@ export namespace Prisma {
    }
 
    /**
+    * Count Type ArticleCountOutputType
+    */
+
+   export type ArticleCountOutputType = {
+      chapter: number
+   }
+
+   export type ArticleCountOutputTypeSelect = {
+      chapter?: boolean
+   }
+
+   export type ArticleCountOutputTypeGetPayload<
+      S extends boolean | null | undefined | ArticleCountOutputTypeArgs,
+   > = S extends { select: any; include: any }
+      ? 'Please either choose `select` or `include`'
+      : S extends true
+      ? ArticleCountOutputType
+      : S extends undefined
+      ? never
+      : S extends { include: any } & ArticleCountOutputTypeArgs
+      ? ArticleCountOutputType
+      : S extends { select: any } & ArticleCountOutputTypeArgs
+      ? {
+           [P in TruthyKeys<
+              S['select']
+           >]: P extends keyof ArticleCountOutputType
+              ? ArticleCountOutputType[P]
+              : never
+        }
+      : ArticleCountOutputType
+
+   // Custom InputTypes
+
+   /**
+    * ArticleCountOutputType without action
+    */
+   export type ArticleCountOutputTypeArgs = {
+      /**
+       * Select specific fields to fetch from the ArticleCountOutputType
+       */
+      select?: ArticleCountOutputTypeSelect | null
+   }
+
+   /**
     * Models
     */
 
@@ -981,33 +1066,27 @@ export namespace Prisma {
 
    export type UserMinAggregateOutputType = {
       id: number | null
-      email: string | null
       username: string | null
       password: string | null
-      emailToken: string | null
-      confirmed: boolean | null
+      phoneNumber: string | null
       createdAt: Date | null
       updatedAt: Date | null
    }
 
    export type UserMaxAggregateOutputType = {
       id: number | null
-      email: string | null
       username: string | null
       password: string | null
-      emailToken: string | null
-      confirmed: boolean | null
+      phoneNumber: string | null
       createdAt: Date | null
       updatedAt: Date | null
    }
 
    export type UserCountAggregateOutputType = {
       id: number
-      email: number
       username: number
       password: number
-      emailToken: number
-      confirmed: number
+      phoneNumber: number
       createdAt: number
       updatedAt: number
       _all: number
@@ -1023,33 +1102,27 @@ export namespace Prisma {
 
    export type UserMinAggregateInputType = {
       id?: true
-      email?: true
       username?: true
       password?: true
-      emailToken?: true
-      confirmed?: true
+      phoneNumber?: true
       createdAt?: true
       updatedAt?: true
    }
 
    export type UserMaxAggregateInputType = {
       id?: true
-      email?: true
       username?: true
       password?: true
-      emailToken?: true
-      confirmed?: true
+      phoneNumber?: true
       createdAt?: true
       updatedAt?: true
    }
 
    export type UserCountAggregateInputType = {
       id?: true
-      email?: true
       username?: true
       password?: true
-      emailToken?: true
-      confirmed?: true
+      phoneNumber?: true
       createdAt?: true
       updatedAt?: true
       _all?: true
@@ -1140,11 +1213,9 @@ export namespace Prisma {
 
    export type UserGroupByOutputType = {
       id: number
-      email: string
       username: string | null
       password: string
-      emailToken: string
-      confirmed: boolean
+      phoneNumber: string
       createdAt: Date
       updatedAt: Date
       _count: UserCountAggregateOutputType | null
@@ -1168,19 +1239,17 @@ export namespace Prisma {
 
    export type UserSelect = {
       id?: boolean
-      email?: boolean
       username?: boolean
       password?: boolean
-      emailToken?: boolean
-      confirmed?: boolean
+      phoneNumber?: boolean
       createdAt?: boolean
       updatedAt?: boolean
-      project?: boolean | User$projectArgs
+      article?: boolean | User$articleArgs
       _count?: boolean | UserCountOutputTypeArgs
    }
 
    export type UserInclude = {
-      project?: boolean | User$projectArgs
+      article?: boolean | User$articleArgs
       _count?: boolean | UserCountOutputTypeArgs
    }
 
@@ -1193,16 +1262,16 @@ export namespace Prisma {
          ? never
          : S extends { include: any } & (UserArgs | UserFindManyArgs)
          ? User & {
-              [P in TruthyKeys<S['include']>]: P extends 'project'
-                 ? Array<ProjectGetPayload<S['include'][P]>>
+              [P in TruthyKeys<S['include']>]: P extends 'article'
+                 ? Array<ArticleGetPayload<S['include'][P]>>
                  : P extends '_count'
                  ? UserCountOutputTypeGetPayload<S['include'][P]>
                  : never
            }
          : S extends { select: any } & (UserArgs | UserFindManyArgs)
          ? {
-              [P in TruthyKeys<S['select']>]: P extends 'project'
-                 ? Array<ProjectGetPayload<S['select'][P]>>
+              [P in TruthyKeys<S['select']>]: P extends 'article'
+                 ? Array<ArticleGetPayload<S['select'][P]>>
                  : P extends '_count'
                  ? UserCountOutputTypeGetPayload<S['select'][P]>
                  : P extends keyof User
@@ -1625,9 +1694,9 @@ export namespace Prisma {
          _isList?: boolean,
       )
 
-      project<T extends User$projectArgs = {}>(
-         args?: Subset<T, User$projectArgs>,
-      ): Prisma.PrismaPromise<Array<ProjectGetPayload<T>> | Null>
+      article<T extends User$articleArgs = {}>(
+         args?: Subset<T, User$articleArgs>,
+      ): Prisma.PrismaPromise<Array<ArticleGetPayload<T>> | Null>
 
       private get _document()
       /**
@@ -1985,23 +2054,23 @@ export namespace Prisma {
    }
 
    /**
-    * User.project
+    * User.article
     */
-   export type User$projectArgs = {
+   export type User$articleArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the Article
        */
-      select?: ProjectSelect | null
+      select?: ArticleSelect | null
       /**
        * Choose, which related nodes to fetch as well.
        */
-      include?: ProjectInclude | null
-      where?: ProjectWhereInput
-      orderBy?: Enumerable<ProjectOrderByWithRelationInput>
-      cursor?: ProjectWhereUniqueInput
+      include?: ArticleInclude | null
+      where?: ArticleWhereInput
+      orderBy?: Enumerable<ArticleOrderByWithRelationInput>
+      cursor?: ArticleWhereUniqueInput
       take?: number
       skip?: number
-      distinct?: Enumerable<ProjectScalarFieldEnum>
+      distinct?: Enumerable<ArticleScalarFieldEnum>
    }
 
    /**
@@ -2019,255 +2088,238 @@ export namespace Prisma {
    }
 
    /**
-    * Model Project
+    * Model VerificationCode
     */
 
-   export type AggregateProject = {
-      _count: ProjectCountAggregateOutputType | null
-      _avg: ProjectAvgAggregateOutputType | null
-      _sum: ProjectSumAggregateOutputType | null
-      _min: ProjectMinAggregateOutputType | null
-      _max: ProjectMaxAggregateOutputType | null
+   export type AggregateVerificationCode = {
+      _count: VerificationCodeCountAggregateOutputType | null
+      _avg: VerificationCodeAvgAggregateOutputType | null
+      _sum: VerificationCodeSumAggregateOutputType | null
+      _min: VerificationCodeMinAggregateOutputType | null
+      _max: VerificationCodeMaxAggregateOutputType | null
    }
 
-   export type ProjectAvgAggregateOutputType = {
+   export type VerificationCodeAvgAggregateOutputType = {
       id: number | null
-      userId: number | null
    }
 
-   export type ProjectSumAggregateOutputType = {
+   export type VerificationCodeSumAggregateOutputType = {
       id: number | null
-      userId: number | null
    }
 
-   export type ProjectMinAggregateOutputType = {
+   export type VerificationCodeMinAggregateOutputType = {
       id: number | null
-      name: string | null
-      pageHtml: string | null
+      phoneNumber: string | null
+      code: string | null
       createdAt: Date | null
       updatedAt: Date | null
-      userId: number | null
    }
 
-   export type ProjectMaxAggregateOutputType = {
+   export type VerificationCodeMaxAggregateOutputType = {
       id: number | null
-      name: string | null
-      pageHtml: string | null
+      phoneNumber: string | null
+      code: string | null
       createdAt: Date | null
       updatedAt: Date | null
-      userId: number | null
    }
 
-   export type ProjectCountAggregateOutputType = {
+   export type VerificationCodeCountAggregateOutputType = {
       id: number
-      name: number
-      pageHtml: number
-      nodeData: number
-      settings: number
+      phoneNumber: number
+      code: number
       createdAt: number
       updatedAt: number
-      userId: number
       _all: number
    }
 
-   export type ProjectAvgAggregateInputType = {
+   export type VerificationCodeAvgAggregateInputType = {
       id?: true
-      userId?: true
    }
 
-   export type ProjectSumAggregateInputType = {
+   export type VerificationCodeSumAggregateInputType = {
       id?: true
-      userId?: true
    }
 
-   export type ProjectMinAggregateInputType = {
+   export type VerificationCodeMinAggregateInputType = {
       id?: true
-      name?: true
-      pageHtml?: true
+      phoneNumber?: true
+      code?: true
       createdAt?: true
       updatedAt?: true
-      userId?: true
    }
 
-   export type ProjectMaxAggregateInputType = {
+   export type VerificationCodeMaxAggregateInputType = {
       id?: true
-      name?: true
-      pageHtml?: true
+      phoneNumber?: true
+      code?: true
       createdAt?: true
       updatedAt?: true
-      userId?: true
    }
 
-   export type ProjectCountAggregateInputType = {
+   export type VerificationCodeCountAggregateInputType = {
       id?: true
-      name?: true
-      pageHtml?: true
-      nodeData?: true
-      settings?: true
+      phoneNumber?: true
+      code?: true
       createdAt?: true
       updatedAt?: true
-      userId?: true
       _all?: true
    }
 
-   export type ProjectAggregateArgs = {
+   export type VerificationCodeAggregateArgs = {
       /**
-       * Filter which Project to aggregate.
+       * Filter which VerificationCode to aggregate.
        */
-      where?: ProjectWhereInput
+      where?: VerificationCodeWhereInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
        *
-       * Determine the order of Projects to fetch.
+       * Determine the order of VerificationCodes to fetch.
        */
-      orderBy?: Enumerable<ProjectOrderByWithRelationInput>
+      orderBy?: Enumerable<VerificationCodeOrderByWithRelationInput>
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
        *
        * Sets the start position
        */
-      cursor?: ProjectWhereUniqueInput
+      cursor?: VerificationCodeWhereUniqueInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Take `±n` Projects from the position of the cursor.
+       * Take `±n` VerificationCodes from the position of the cursor.
        */
       take?: number
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Skip the first `n` Projects.
+       * Skip the first `n` VerificationCodes.
        */
       skip?: number
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
        *
-       * Count returned Projects
+       * Count returned VerificationCodes
        **/
-      _count?: true | ProjectCountAggregateInputType
+      _count?: true | VerificationCodeCountAggregateInputType
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
        *
        * Select which fields to average
        **/
-      _avg?: ProjectAvgAggregateInputType
+      _avg?: VerificationCodeAvgAggregateInputType
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
        *
        * Select which fields to sum
        **/
-      _sum?: ProjectSumAggregateInputType
+      _sum?: VerificationCodeSumAggregateInputType
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
        *
        * Select which fields to find the minimum value
        **/
-      _min?: ProjectMinAggregateInputType
+      _min?: VerificationCodeMinAggregateInputType
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
        *
        * Select which fields to find the maximum value
        **/
-      _max?: ProjectMaxAggregateInputType
+      _max?: VerificationCodeMaxAggregateInputType
    }
 
-   export type GetProjectAggregateType<T extends ProjectAggregateArgs> = {
-      [P in keyof T & keyof AggregateProject]: P extends '_count' | 'count'
+   export type GetVerificationCodeAggregateType<
+      T extends VerificationCodeAggregateArgs,
+   > = {
+      [P in keyof T & keyof AggregateVerificationCode]: P extends
+         | '_count'
+         | 'count'
          ? T[P] extends true
             ? number
-            : GetScalarType<T[P], AggregateProject[P]>
-         : GetScalarType<T[P], AggregateProject[P]>
+            : GetScalarType<T[P], AggregateVerificationCode[P]>
+         : GetScalarType<T[P], AggregateVerificationCode[P]>
    }
 
-   export type ProjectGroupByArgs = {
-      where?: ProjectWhereInput
-      orderBy?: Enumerable<ProjectOrderByWithAggregationInput>
-      by: ProjectScalarFieldEnum[]
-      having?: ProjectScalarWhereWithAggregatesInput
+   export type VerificationCodeGroupByArgs = {
+      where?: VerificationCodeWhereInput
+      orderBy?: Enumerable<VerificationCodeOrderByWithAggregationInput>
+      by: VerificationCodeScalarFieldEnum[]
+      having?: VerificationCodeScalarWhereWithAggregatesInput
       take?: number
       skip?: number
-      _count?: ProjectCountAggregateInputType | true
-      _avg?: ProjectAvgAggregateInputType
-      _sum?: ProjectSumAggregateInputType
-      _min?: ProjectMinAggregateInputType
-      _max?: ProjectMaxAggregateInputType
+      _count?: VerificationCodeCountAggregateInputType | true
+      _avg?: VerificationCodeAvgAggregateInputType
+      _sum?: VerificationCodeSumAggregateInputType
+      _min?: VerificationCodeMinAggregateInputType
+      _max?: VerificationCodeMaxAggregateInputType
    }
 
-   export type ProjectGroupByOutputType = {
+   export type VerificationCodeGroupByOutputType = {
       id: number
-      name: string
-      pageHtml: string | null
-      nodeData: JsonValue | null
-      settings: JsonValue | null
+      phoneNumber: string
+      code: string
       createdAt: Date
       updatedAt: Date
-      userId: number
-      _count: ProjectCountAggregateOutputType | null
-      _avg: ProjectAvgAggregateOutputType | null
-      _sum: ProjectSumAggregateOutputType | null
-      _min: ProjectMinAggregateOutputType | null
-      _max: ProjectMaxAggregateOutputType | null
+      _count: VerificationCodeCountAggregateOutputType | null
+      _avg: VerificationCodeAvgAggregateOutputType | null
+      _sum: VerificationCodeSumAggregateOutputType | null
+      _min: VerificationCodeMinAggregateOutputType | null
+      _max: VerificationCodeMaxAggregateOutputType | null
    }
 
-   type GetProjectGroupByPayload<T extends ProjectGroupByArgs> =
-      Prisma.PrismaPromise<
-         Array<
-            PickArray<ProjectGroupByOutputType, T['by']> & {
-               [P in keyof T &
-                  keyof ProjectGroupByOutputType]: P extends '_count'
-                  ? T[P] extends boolean
-                     ? number
-                     : GetScalarType<T[P], ProjectGroupByOutputType[P]>
-                  : GetScalarType<T[P], ProjectGroupByOutputType[P]>
-            }
-         >
+   type GetVerificationCodeGroupByPayload<
+      T extends VerificationCodeGroupByArgs,
+   > = Prisma.PrismaPromise<
+      Array<
+         PickArray<VerificationCodeGroupByOutputType, T['by']> & {
+            [P in keyof T &
+               keyof VerificationCodeGroupByOutputType]: P extends '_count'
+               ? T[P] extends boolean
+                  ? number
+                  : GetScalarType<T[P], VerificationCodeGroupByOutputType[P]>
+               : GetScalarType<T[P], VerificationCodeGroupByOutputType[P]>
+         }
       >
+   >
 
-   export type ProjectSelect = {
+   export type VerificationCodeSelect = {
       id?: boolean
-      name?: boolean
-      pageHtml?: boolean
-      nodeData?: boolean
-      settings?: boolean
+      phoneNumber?: boolean
+      code?: boolean
       createdAt?: boolean
       updatedAt?: boolean
-      userId?: boolean
-      user?: boolean | UserArgs
    }
 
-   export type ProjectInclude = {
-      user?: boolean | UserArgs
-   }
-
-   export type ProjectGetPayload<
-      S extends boolean | null | undefined | ProjectArgs,
+   export type VerificationCodeGetPayload<
+      S extends boolean | null | undefined | VerificationCodeArgs,
    > = S extends { select: any; include: any }
       ? 'Please either choose `select` or `include`'
       : S extends true
-      ? Project
+      ? VerificationCode
       : S extends undefined
       ? never
-      : S extends { include: any } & (ProjectArgs | ProjectFindManyArgs)
-      ? Project & {
-           [P in TruthyKeys<S['include']>]: P extends 'user'
-              ? UserGetPayload<S['include'][P]>
-              : never
-        }
-      : S extends { select: any } & (ProjectArgs | ProjectFindManyArgs)
+      : S extends { include: any } & (
+           | VerificationCodeArgs
+           | VerificationCodeFindManyArgs
+        )
+      ? VerificationCode
+      : S extends { select: any } & (
+           | VerificationCodeArgs
+           | VerificationCodeFindManyArgs
+        )
       ? {
-           [P in TruthyKeys<S['select']>]: P extends 'user'
-              ? UserGetPayload<S['select'][P]>
-              : P extends keyof Project
-              ? Project[P]
+           [P in TruthyKeys<S['select']>]: P extends keyof VerificationCode
+              ? VerificationCode[P]
               : never
         }
-      : Project
+      : VerificationCode
 
-   type ProjectCountArgs = Omit<ProjectFindManyArgs, 'select' | 'include'> & {
-      select?: ProjectCountAggregateInputType | true
+   type VerificationCodeCountArgs = Omit<
+      VerificationCodeFindManyArgs,
+      'select' | 'include'
+   > & {
+      select?: VerificationCodeCountAggregateInputType | true
    }
 
-   export interface ProjectDelegate<
+   export interface VerificationCodeDelegate<
       GlobalRejectSettings extends
          | Prisma.RejectOnNotFound
          | Prisma.RejectPerOperation
@@ -2275,169 +2327,175 @@ export namespace Prisma {
          | undefined,
    > {
       /**
-       * Find zero or one Project that matches the filter.
-       * @param {ProjectFindUniqueArgs} args - Arguments to find a Project
+       * Find zero or one VerificationCode that matches the filter.
+       * @param {VerificationCodeFindUniqueArgs} args - Arguments to find a VerificationCode
        * @example
-       * // Get one Project
-       * const project = await prisma.project.findUnique({
+       * // Get one VerificationCode
+       * const verificationCode = await prisma.verificationCode.findUnique({
        *   where: {
        *     // ... provide filter here
        *   }
        * })
        **/
       findUnique<
-         T extends ProjectFindUniqueArgs,
+         T extends VerificationCodeFindUniqueArgs,
          LocalRejectSettings = T['rejectOnNotFound'] extends RejectOnNotFound
             ? T['rejectOnNotFound']
             : undefined,
       >(
-         args: SelectSubset<T, ProjectFindUniqueArgs>,
+         args: SelectSubset<T, VerificationCodeFindUniqueArgs>,
       ): HasReject<
          GlobalRejectSettings,
          LocalRejectSettings,
          'findUnique',
-         'Project'
+         'VerificationCode'
       > extends True
-         ? Prisma__ProjectClient<ProjectGetPayload<T>>
-         : Prisma__ProjectClient<ProjectGetPayload<T> | null, null>
+         ? Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
+         : Prisma__VerificationCodeClient<
+              VerificationCodeGetPayload<T> | null,
+              null
+           >
 
       /**
-       * Find one Project that matches the filter or throw an error  with `error.code='P2025'`
+       * Find one VerificationCode that matches the filter or throw an error  with `error.code='P2025'`
        *     if no matches were found.
-       * @param {ProjectFindUniqueOrThrowArgs} args - Arguments to find a Project
+       * @param {VerificationCodeFindUniqueOrThrowArgs} args - Arguments to find a VerificationCode
        * @example
-       * // Get one Project
-       * const project = await prisma.project.findUniqueOrThrow({
+       * // Get one VerificationCode
+       * const verificationCode = await prisma.verificationCode.findUniqueOrThrow({
        *   where: {
        *     // ... provide filter here
        *   }
        * })
        **/
-      findUniqueOrThrow<T extends ProjectFindUniqueOrThrowArgs>(
-         args?: SelectSubset<T, ProjectFindUniqueOrThrowArgs>,
-      ): Prisma__ProjectClient<ProjectGetPayload<T>>
+      findUniqueOrThrow<T extends VerificationCodeFindUniqueOrThrowArgs>(
+         args?: SelectSubset<T, VerificationCodeFindUniqueOrThrowArgs>,
+      ): Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
 
       /**
-       * Find the first Project that matches the filter.
+       * Find the first VerificationCode that matches the filter.
        * Note, that providing `undefined` is treated as the value not being there.
        * Read more here: https://pris.ly/d/null-undefined
-       * @param {ProjectFindFirstArgs} args - Arguments to find a Project
+       * @param {VerificationCodeFindFirstArgs} args - Arguments to find a VerificationCode
        * @example
-       * // Get one Project
-       * const project = await prisma.project.findFirst({
+       * // Get one VerificationCode
+       * const verificationCode = await prisma.verificationCode.findFirst({
        *   where: {
        *     // ... provide filter here
        *   }
        * })
        **/
       findFirst<
-         T extends ProjectFindFirstArgs,
+         T extends VerificationCodeFindFirstArgs,
          LocalRejectSettings = T['rejectOnNotFound'] extends RejectOnNotFound
             ? T['rejectOnNotFound']
             : undefined,
       >(
-         args?: SelectSubset<T, ProjectFindFirstArgs>,
+         args?: SelectSubset<T, VerificationCodeFindFirstArgs>,
       ): HasReject<
          GlobalRejectSettings,
          LocalRejectSettings,
          'findFirst',
-         'Project'
+         'VerificationCode'
       > extends True
-         ? Prisma__ProjectClient<ProjectGetPayload<T>>
-         : Prisma__ProjectClient<ProjectGetPayload<T> | null, null>
+         ? Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
+         : Prisma__VerificationCodeClient<
+              VerificationCodeGetPayload<T> | null,
+              null
+           >
 
       /**
-       * Find the first Project that matches the filter or
+       * Find the first VerificationCode that matches the filter or
        * throw `NotFoundError` if no matches were found.
        * Note, that providing `undefined` is treated as the value not being there.
        * Read more here: https://pris.ly/d/null-undefined
-       * @param {ProjectFindFirstOrThrowArgs} args - Arguments to find a Project
+       * @param {VerificationCodeFindFirstOrThrowArgs} args - Arguments to find a VerificationCode
        * @example
-       * // Get one Project
-       * const project = await prisma.project.findFirstOrThrow({
+       * // Get one VerificationCode
+       * const verificationCode = await prisma.verificationCode.findFirstOrThrow({
        *   where: {
        *     // ... provide filter here
        *   }
        * })
        **/
-      findFirstOrThrow<T extends ProjectFindFirstOrThrowArgs>(
-         args?: SelectSubset<T, ProjectFindFirstOrThrowArgs>,
-      ): Prisma__ProjectClient<ProjectGetPayload<T>>
+      findFirstOrThrow<T extends VerificationCodeFindFirstOrThrowArgs>(
+         args?: SelectSubset<T, VerificationCodeFindFirstOrThrowArgs>,
+      ): Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
 
       /**
-       * Find zero or more Projects that matches the filter.
+       * Find zero or more VerificationCodes that matches the filter.
        * Note, that providing `undefined` is treated as the value not being there.
        * Read more here: https://pris.ly/d/null-undefined
-       * @param {ProjectFindManyArgs=} args - Arguments to filter and select certain fields only.
+       * @param {VerificationCodeFindManyArgs=} args - Arguments to filter and select certain fields only.
        * @example
-       * // Get all Projects
-       * const projects = await prisma.project.findMany()
+       * // Get all VerificationCodes
+       * const verificationCodes = await prisma.verificationCode.findMany()
        *
-       * // Get first 10 Projects
-       * const projects = await prisma.project.findMany({ take: 10 })
+       * // Get first 10 VerificationCodes
+       * const verificationCodes = await prisma.verificationCode.findMany({ take: 10 })
        *
        * // Only select the `id`
-       * const projectWithIdOnly = await prisma.project.findMany({ select: { id: true } })
+       * const verificationCodeWithIdOnly = await prisma.verificationCode.findMany({ select: { id: true } })
        *
        **/
-      findMany<T extends ProjectFindManyArgs>(
-         args?: SelectSubset<T, ProjectFindManyArgs>,
-      ): Prisma.PrismaPromise<Array<ProjectGetPayload<T>>>
+      findMany<T extends VerificationCodeFindManyArgs>(
+         args?: SelectSubset<T, VerificationCodeFindManyArgs>,
+      ): Prisma.PrismaPromise<Array<VerificationCodeGetPayload<T>>>
 
       /**
-       * Create a Project.
-       * @param {ProjectCreateArgs} args - Arguments to create a Project.
+       * Create a VerificationCode.
+       * @param {VerificationCodeCreateArgs} args - Arguments to create a VerificationCode.
        * @example
-       * // Create one Project
-       * const Project = await prisma.project.create({
+       * // Create one VerificationCode
+       * const VerificationCode = await prisma.verificationCode.create({
        *   data: {
-       *     // ... data to create a Project
+       *     // ... data to create a VerificationCode
        *   }
        * })
        *
        **/
-      create<T extends ProjectCreateArgs>(
-         args: SelectSubset<T, ProjectCreateArgs>,
-      ): Prisma__ProjectClient<ProjectGetPayload<T>>
+      create<T extends VerificationCodeCreateArgs>(
+         args: SelectSubset<T, VerificationCodeCreateArgs>,
+      ): Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
 
       /**
-       * Create many Projects.
-       *     @param {ProjectCreateManyArgs} args - Arguments to create many Projects.
+       * Create many VerificationCodes.
+       *     @param {VerificationCodeCreateManyArgs} args - Arguments to create many VerificationCodes.
        *     @example
-       *     // Create many Projects
-       *     const project = await prisma.project.createMany({
+       *     // Create many VerificationCodes
+       *     const verificationCode = await prisma.verificationCode.createMany({
        *       data: {
        *         // ... provide data here
        *       }
        *     })
        *
        **/
-      createMany<T extends ProjectCreateManyArgs>(
-         args?: SelectSubset<T, ProjectCreateManyArgs>,
+      createMany<T extends VerificationCodeCreateManyArgs>(
+         args?: SelectSubset<T, VerificationCodeCreateManyArgs>,
       ): Prisma.PrismaPromise<BatchPayload>
 
       /**
-       * Delete a Project.
-       * @param {ProjectDeleteArgs} args - Arguments to delete one Project.
+       * Delete a VerificationCode.
+       * @param {VerificationCodeDeleteArgs} args - Arguments to delete one VerificationCode.
        * @example
-       * // Delete one Project
-       * const Project = await prisma.project.delete({
+       * // Delete one VerificationCode
+       * const VerificationCode = await prisma.verificationCode.delete({
        *   where: {
-       *     // ... filter to delete one Project
+       *     // ... filter to delete one VerificationCode
        *   }
        * })
        *
        **/
-      delete<T extends ProjectDeleteArgs>(
-         args: SelectSubset<T, ProjectDeleteArgs>,
-      ): Prisma__ProjectClient<ProjectGetPayload<T>>
+      delete<T extends VerificationCodeDeleteArgs>(
+         args: SelectSubset<T, VerificationCodeDeleteArgs>,
+      ): Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
 
       /**
-       * Update one Project.
-       * @param {ProjectUpdateArgs} args - Arguments to update one Project.
+       * Update one VerificationCode.
+       * @param {VerificationCodeUpdateArgs} args - Arguments to update one VerificationCode.
        * @example
-       * // Update one Project
-       * const project = await prisma.project.update({
+       * // Update one VerificationCode
+       * const verificationCode = await prisma.verificationCode.update({
        *   where: {
        *     // ... provide filter here
        *   },
@@ -2447,34 +2505,34 @@ export namespace Prisma {
        * })
        *
        **/
-      update<T extends ProjectUpdateArgs>(
-         args: SelectSubset<T, ProjectUpdateArgs>,
-      ): Prisma__ProjectClient<ProjectGetPayload<T>>
+      update<T extends VerificationCodeUpdateArgs>(
+         args: SelectSubset<T, VerificationCodeUpdateArgs>,
+      ): Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
 
       /**
-       * Delete zero or more Projects.
-       * @param {ProjectDeleteManyArgs} args - Arguments to filter Projects to delete.
+       * Delete zero or more VerificationCodes.
+       * @param {VerificationCodeDeleteManyArgs} args - Arguments to filter VerificationCodes to delete.
        * @example
-       * // Delete a few Projects
-       * const { count } = await prisma.project.deleteMany({
+       * // Delete a few VerificationCodes
+       * const { count } = await prisma.verificationCode.deleteMany({
        *   where: {
        *     // ... provide filter here
        *   }
        * })
        *
        **/
-      deleteMany<T extends ProjectDeleteManyArgs>(
-         args?: SelectSubset<T, ProjectDeleteManyArgs>,
+      deleteMany<T extends VerificationCodeDeleteManyArgs>(
+         args?: SelectSubset<T, VerificationCodeDeleteManyArgs>,
       ): Prisma.PrismaPromise<BatchPayload>
 
       /**
-       * Update zero or more Projects.
+       * Update zero or more VerificationCodes.
        * Note, that providing `undefined` is treated as the value not being there.
        * Read more here: https://pris.ly/d/null-undefined
-       * @param {ProjectUpdateManyArgs} args - Arguments to update one or more rows.
+       * @param {VerificationCodeUpdateManyArgs} args - Arguments to update one or more rows.
        * @example
-       * // Update many Projects
-       * const project = await prisma.project.updateMany({
+       * // Update many VerificationCodes
+       * const verificationCode = await prisma.verificationCode.updateMany({
        *   where: {
        *     // ... provide filter here
        *   },
@@ -2484,59 +2542,62 @@ export namespace Prisma {
        * })
        *
        **/
-      updateMany<T extends ProjectUpdateManyArgs>(
-         args: SelectSubset<T, ProjectUpdateManyArgs>,
+      updateMany<T extends VerificationCodeUpdateManyArgs>(
+         args: SelectSubset<T, VerificationCodeUpdateManyArgs>,
       ): Prisma.PrismaPromise<BatchPayload>
 
       /**
-       * Create or update one Project.
-       * @param {ProjectUpsertArgs} args - Arguments to update or create a Project.
+       * Create or update one VerificationCode.
+       * @param {VerificationCodeUpsertArgs} args - Arguments to update or create a VerificationCode.
        * @example
-       * // Update or create a Project
-       * const project = await prisma.project.upsert({
+       * // Update or create a VerificationCode
+       * const verificationCode = await prisma.verificationCode.upsert({
        *   create: {
-       *     // ... data to create a Project
+       *     // ... data to create a VerificationCode
        *   },
        *   update: {
        *     // ... in case it already exists, update
        *   },
        *   where: {
-       *     // ... the filter for the Project we want to update
+       *     // ... the filter for the VerificationCode we want to update
        *   }
        * })
        **/
-      upsert<T extends ProjectUpsertArgs>(
-         args: SelectSubset<T, ProjectUpsertArgs>,
-      ): Prisma__ProjectClient<ProjectGetPayload<T>>
+      upsert<T extends VerificationCodeUpsertArgs>(
+         args: SelectSubset<T, VerificationCodeUpsertArgs>,
+      ): Prisma__VerificationCodeClient<VerificationCodeGetPayload<T>>
 
       /**
-       * Count the number of Projects.
+       * Count the number of VerificationCodes.
        * Note, that providing `undefined` is treated as the value not being there.
        * Read more here: https://pris.ly/d/null-undefined
-       * @param {ProjectCountArgs} args - Arguments to filter Projects to count.
+       * @param {VerificationCodeCountArgs} args - Arguments to filter VerificationCodes to count.
        * @example
-       * // Count the number of Projects
-       * const count = await prisma.project.count({
+       * // Count the number of VerificationCodes
+       * const count = await prisma.verificationCode.count({
        *   where: {
-       *     // ... the filter for the Projects we want to count
+       *     // ... the filter for the VerificationCodes we want to count
        *   }
        * })
        **/
-      count<T extends ProjectCountArgs>(
-         args?: Subset<T, ProjectCountArgs>,
+      count<T extends VerificationCodeCountArgs>(
+         args?: Subset<T, VerificationCodeCountArgs>,
       ): Prisma.PrismaPromise<
          T extends _Record<'select', any>
             ? T['select'] extends true
                ? number
-               : GetScalarType<T['select'], ProjectCountAggregateOutputType>
+               : GetScalarType<
+                    T['select'],
+                    VerificationCodeCountAggregateOutputType
+                 >
             : number
       >
 
       /**
-       * Allows you to perform aggregations operations on a Project.
+       * Allows you to perform aggregations operations on a VerificationCode.
        * Note, that providing `undefined` is treated as the value not being there.
        * Read more here: https://pris.ly/d/null-undefined
-       * @param {ProjectAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+       * @param {VerificationCodeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
        * @example
        * // Ordered by age ascending
        * // Where email contains prisma.io
@@ -2556,15 +2617,15 @@ export namespace Prisma {
        *   take: 10,
        * })
        **/
-      aggregate<T extends ProjectAggregateArgs>(
-         args: Subset<T, ProjectAggregateArgs>,
-      ): Prisma.PrismaPromise<GetProjectAggregateType<T>>
+      aggregate<T extends VerificationCodeAggregateArgs>(
+         args: Subset<T, VerificationCodeAggregateArgs>,
+      ): Prisma.PrismaPromise<GetVerificationCodeAggregateType<T>>
 
       /**
-       * Group by Project.
+       * Group by VerificationCode.
        * Note, that providing `undefined` is treated as the value not being there.
        * Read more here: https://pris.ly/d/null-undefined
-       * @param {ProjectGroupByArgs} args - Group by arguments.
+       * @param {VerificationCodeGroupByArgs} args - Group by arguments.
        * @example
        * // Group by city, order by createdAt, get count
        * const result = await prisma.user.groupBy({
@@ -2579,14 +2640,14 @@ export namespace Prisma {
        *
        **/
       groupBy<
-         T extends ProjectGroupByArgs,
+         T extends VerificationCodeGroupByArgs,
          HasSelectOrTake extends Or<
             Extends<'skip', Keys<T>>,
             Extends<'take', Keys<T>>
          >,
          OrderByArg extends True extends HasSelectOrTake
-            ? { orderBy: ProjectGroupByArgs['orderBy'] }
-            : { orderBy?: ProjectGroupByArgs['orderBy'] },
+            ? { orderBy: VerificationCodeGroupByArgs['orderBy'] }
+            : { orderBy?: VerificationCodeGroupByArgs['orderBy'] },
          OrderFields extends ExcludeUnderscoreKeys<
             Keys<MaybeTupleToUnion<T['orderBy']>>
          >,
@@ -2638,20 +2699,20 @@ export namespace Prisma {
                     : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
               }[OrderFields],
       >(
-         args: SubsetIntersection<T, ProjectGroupByArgs, OrderByArg> &
+         args: SubsetIntersection<T, VerificationCodeGroupByArgs, OrderByArg> &
             InputErrors,
       ): {} extends InputErrors
-         ? GetProjectGroupByPayload<T>
+         ? GetVerificationCodeGroupByPayload<T>
          : Prisma.PrismaPromise<InputErrors>
    }
 
    /**
-    * The delegate class that acts as a "Promise-like" for Project.
+    * The delegate class that acts as a "Promise-like" for VerificationCode.
     * Why is this prefixed with `Prisma__`?
     * Because we want to prevent naming conflicts as mentioned in
     * https://github.com/prisma/prisma-client-js/issues/707
     */
-   export class Prisma__ProjectClient<T, Null = never>
+   export class Prisma__VerificationCodeClient<T, Null = never>
       implements Prisma.PrismaPromise<T>
    {
       private readonly _dmmf
@@ -2677,10 +2738,6 @@ export namespace Prisma {
          _measurePerformance?: boolean | undefined,
          _isList?: boolean,
       )
-
-      user<T extends UserArgs = {}>(
-         args?: Subset<T, UserArgs>,
-      ): Prisma__UserClient<UserGetPayload<T> | Null>
 
       private get _document()
       /**
@@ -2722,27 +2779,24 @@ export namespace Prisma {
    // Custom InputTypes
 
    /**
-    * Project base type for findUnique actions
+    * VerificationCode base type for findUnique actions
     */
-   export type ProjectFindUniqueArgsBase = {
+   export type VerificationCodeFindUniqueArgsBase = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the VerificationCode
        */
-      select?: ProjectSelect | null
+      select?: VerificationCodeSelect | null
       /**
-       * Choose, which related nodes to fetch as well.
+       * Filter, which VerificationCode to fetch.
        */
-      include?: ProjectInclude | null
-      /**
-       * Filter, which Project to fetch.
-       */
-      where: ProjectWhereUniqueInput
+      where: VerificationCodeWhereUniqueInput
    }
 
    /**
-    * Project findUnique
+    * VerificationCode findUnique
     */
-   export interface ProjectFindUniqueArgs extends ProjectFindUniqueArgsBase {
+   export interface VerificationCodeFindUniqueArgs
+      extends VerificationCodeFindUniqueArgsBase {
       /**
        * Throw an Error if query returns no results
        * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
@@ -2751,75 +2805,68 @@ export namespace Prisma {
    }
 
    /**
-    * Project findUniqueOrThrow
+    * VerificationCode findUniqueOrThrow
     */
-   export type ProjectFindUniqueOrThrowArgs = {
+   export type VerificationCodeFindUniqueOrThrowArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the VerificationCode
        */
-      select?: ProjectSelect | null
+      select?: VerificationCodeSelect | null
       /**
-       * Choose, which related nodes to fetch as well.
+       * Filter, which VerificationCode to fetch.
        */
-      include?: ProjectInclude | null
-      /**
-       * Filter, which Project to fetch.
-       */
-      where: ProjectWhereUniqueInput
+      where: VerificationCodeWhereUniqueInput
    }
 
    /**
-    * Project base type for findFirst actions
+    * VerificationCode base type for findFirst actions
     */
-   export type ProjectFindFirstArgsBase = {
+   export type VerificationCodeFindFirstArgsBase = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the VerificationCode
        */
-      select?: ProjectSelect | null
+      select?: VerificationCodeSelect | null
       /**
-       * Choose, which related nodes to fetch as well.
+       * Filter, which VerificationCode to fetch.
        */
-      include?: ProjectInclude | null
-      /**
-       * Filter, which Project to fetch.
-       */
-      where?: ProjectWhereInput
+      where?: VerificationCodeWhereInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
        *
-       * Determine the order of Projects to fetch.
+       * Determine the order of VerificationCodes to fetch.
        */
-      orderBy?: Enumerable<ProjectOrderByWithRelationInput>
+      orderBy?: Enumerable<VerificationCodeOrderByWithRelationInput>
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
        *
-       * Sets the position for searching for Projects.
+       * Sets the position for searching for VerificationCodes.
        */
-      cursor?: ProjectWhereUniqueInput
+      cursor?: VerificationCodeWhereUniqueInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Take `±n` Projects from the position of the cursor.
+       * Take `±n` VerificationCodes from the position of the cursor.
        */
       take?: number
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Skip the first `n` Projects.
+       * Skip the first `n` VerificationCodes.
        */
       skip?: number
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
        *
-       * Filter by unique combinations of Projects.
+       * Filter by unique combinations of VerificationCodes.
        */
-      distinct?: Enumerable<ProjectScalarFieldEnum>
+      distinct?: Enumerable<VerificationCodeScalarFieldEnum>
    }
 
    /**
-    * Project findFirst
+    * VerificationCode findFirst
     */
-   export interface ProjectFindFirstArgs extends ProjectFindFirstArgsBase {
+   export interface VerificationCodeFindFirstArgs
+      extends VerificationCodeFindFirstArgsBase {
       /**
        * Throw an Error if query returns no results
        * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
@@ -2828,263 +2875,2311 @@ export namespace Prisma {
    }
 
    /**
-    * Project findFirstOrThrow
+    * VerificationCode findFirstOrThrow
     */
-   export type ProjectFindFirstOrThrowArgs = {
+   export type VerificationCodeFindFirstOrThrowArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the VerificationCode
        */
-      select?: ProjectSelect | null
+      select?: VerificationCodeSelect | null
       /**
-       * Choose, which related nodes to fetch as well.
+       * Filter, which VerificationCode to fetch.
        */
-      include?: ProjectInclude | null
-      /**
-       * Filter, which Project to fetch.
-       */
-      where?: ProjectWhereInput
+      where?: VerificationCodeWhereInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
        *
-       * Determine the order of Projects to fetch.
+       * Determine the order of VerificationCodes to fetch.
        */
-      orderBy?: Enumerable<ProjectOrderByWithRelationInput>
+      orderBy?: Enumerable<VerificationCodeOrderByWithRelationInput>
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
        *
-       * Sets the position for searching for Projects.
+       * Sets the position for searching for VerificationCodes.
        */
-      cursor?: ProjectWhereUniqueInput
+      cursor?: VerificationCodeWhereUniqueInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Take `±n` Projects from the position of the cursor.
+       * Take `±n` VerificationCodes from the position of the cursor.
        */
       take?: number
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Skip the first `n` Projects.
+       * Skip the first `n` VerificationCodes.
        */
       skip?: number
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
        *
-       * Filter by unique combinations of Projects.
+       * Filter by unique combinations of VerificationCodes.
        */
-      distinct?: Enumerable<ProjectScalarFieldEnum>
+      distinct?: Enumerable<VerificationCodeScalarFieldEnum>
    }
 
    /**
-    * Project findMany
+    * VerificationCode findMany
     */
-   export type ProjectFindManyArgs = {
+   export type VerificationCodeFindManyArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the VerificationCode
        */
-      select?: ProjectSelect | null
+      select?: VerificationCodeSelect | null
       /**
-       * Choose, which related nodes to fetch as well.
+       * Filter, which VerificationCodes to fetch.
        */
-      include?: ProjectInclude | null
-      /**
-       * Filter, which Projects to fetch.
-       */
-      where?: ProjectWhereInput
+      where?: VerificationCodeWhereInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
        *
-       * Determine the order of Projects to fetch.
+       * Determine the order of VerificationCodes to fetch.
        */
-      orderBy?: Enumerable<ProjectOrderByWithRelationInput>
+      orderBy?: Enumerable<VerificationCodeOrderByWithRelationInput>
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
        *
-       * Sets the position for listing Projects.
+       * Sets the position for listing VerificationCodes.
        */
-      cursor?: ProjectWhereUniqueInput
+      cursor?: VerificationCodeWhereUniqueInput
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Take `±n` Projects from the position of the cursor.
+       * Take `±n` VerificationCodes from the position of the cursor.
        */
       take?: number
       /**
        * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
        *
-       * Skip the first `n` Projects.
+       * Skip the first `n` VerificationCodes.
        */
       skip?: number
-      distinct?: Enumerable<ProjectScalarFieldEnum>
+      distinct?: Enumerable<VerificationCodeScalarFieldEnum>
    }
 
    /**
-    * Project create
+    * VerificationCode create
     */
-   export type ProjectCreateArgs = {
+   export type VerificationCodeCreateArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the VerificationCode
        */
-      select?: ProjectSelect | null
+      select?: VerificationCodeSelect | null
       /**
-       * Choose, which related nodes to fetch as well.
+       * The data needed to create a VerificationCode.
        */
-      include?: ProjectInclude | null
-      /**
-       * The data needed to create a Project.
-       */
-      data: XOR<ProjectCreateInput, ProjectUncheckedCreateInput>
+      data: XOR<
+         VerificationCodeCreateInput,
+         VerificationCodeUncheckedCreateInput
+      >
    }
 
    /**
-    * Project createMany
+    * VerificationCode createMany
     */
-   export type ProjectCreateManyArgs = {
+   export type VerificationCodeCreateManyArgs = {
       /**
-       * The data used to create many Projects.
+       * The data used to create many VerificationCodes.
        */
-      data: Enumerable<ProjectCreateManyInput>
+      data: Enumerable<VerificationCodeCreateManyInput>
       skipDuplicates?: boolean
    }
 
    /**
-    * Project update
+    * VerificationCode update
     */
-   export type ProjectUpdateArgs = {
+   export type VerificationCodeUpdateArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the VerificationCode
        */
-      select?: ProjectSelect | null
+      select?: VerificationCodeSelect | null
+      /**
+       * The data needed to update a VerificationCode.
+       */
+      data: XOR<
+         VerificationCodeUpdateInput,
+         VerificationCodeUncheckedUpdateInput
+      >
+      /**
+       * Choose, which VerificationCode to update.
+       */
+      where: VerificationCodeWhereUniqueInput
+   }
+
+   /**
+    * VerificationCode updateMany
+    */
+   export type VerificationCodeUpdateManyArgs = {
+      /**
+       * The data used to update VerificationCodes.
+       */
+      data: XOR<
+         VerificationCodeUpdateManyMutationInput,
+         VerificationCodeUncheckedUpdateManyInput
+      >
+      /**
+       * Filter which VerificationCodes to update
+       */
+      where?: VerificationCodeWhereInput
+   }
+
+   /**
+    * VerificationCode upsert
+    */
+   export type VerificationCodeUpsertArgs = {
+      /**
+       * Select specific fields to fetch from the VerificationCode
+       */
+      select?: VerificationCodeSelect | null
+      /**
+       * The filter to search for the VerificationCode to update in case it exists.
+       */
+      where: VerificationCodeWhereUniqueInput
+      /**
+       * In case the VerificationCode found by the `where` argument doesn't exist, create a new VerificationCode with this data.
+       */
+      create: XOR<
+         VerificationCodeCreateInput,
+         VerificationCodeUncheckedCreateInput
+      >
+      /**
+       * In case the VerificationCode was found with the provided `where` argument, update it with this data.
+       */
+      update: XOR<
+         VerificationCodeUpdateInput,
+         VerificationCodeUncheckedUpdateInput
+      >
+   }
+
+   /**
+    * VerificationCode delete
+    */
+   export type VerificationCodeDeleteArgs = {
+      /**
+       * Select specific fields to fetch from the VerificationCode
+       */
+      select?: VerificationCodeSelect | null
+      /**
+       * Filter which VerificationCode to delete.
+       */
+      where: VerificationCodeWhereUniqueInput
+   }
+
+   /**
+    * VerificationCode deleteMany
+    */
+   export type VerificationCodeDeleteManyArgs = {
+      /**
+       * Filter which VerificationCodes to delete
+       */
+      where?: VerificationCodeWhereInput
+   }
+
+   /**
+    * VerificationCode without action
+    */
+   export type VerificationCodeArgs = {
+      /**
+       * Select specific fields to fetch from the VerificationCode
+       */
+      select?: VerificationCodeSelect | null
+   }
+
+   /**
+    * Model Article
+    */
+
+   export type AggregateArticle = {
+      _count: ArticleCountAggregateOutputType | null
+      _avg: ArticleAvgAggregateOutputType | null
+      _sum: ArticleSumAggregateOutputType | null
+      _min: ArticleMinAggregateOutputType | null
+      _max: ArticleMaxAggregateOutputType | null
+   }
+
+   export type ArticleAvgAggregateOutputType = {
+      id: number | null
+      userId: number | null
+   }
+
+   export type ArticleSumAggregateOutputType = {
+      id: number | null
+      userId: number | null
+   }
+
+   export type ArticleMinAggregateOutputType = {
+      id: number | null
+      name: string | null
+      createdAt: Date | null
+      updatedAt: Date | null
+      userId: number | null
+   }
+
+   export type ArticleMaxAggregateOutputType = {
+      id: number | null
+      name: string | null
+      createdAt: Date | null
+      updatedAt: Date | null
+      userId: number | null
+   }
+
+   export type ArticleCountAggregateOutputType = {
+      id: number
+      name: number
+      createdAt: number
+      updatedAt: number
+      userId: number
+      _all: number
+   }
+
+   export type ArticleAvgAggregateInputType = {
+      id?: true
+      userId?: true
+   }
+
+   export type ArticleSumAggregateInputType = {
+      id?: true
+      userId?: true
+   }
+
+   export type ArticleMinAggregateInputType = {
+      id?: true
+      name?: true
+      createdAt?: true
+      updatedAt?: true
+      userId?: true
+   }
+
+   export type ArticleMaxAggregateInputType = {
+      id?: true
+      name?: true
+      createdAt?: true
+      updatedAt?: true
+      userId?: true
+   }
+
+   export type ArticleCountAggregateInputType = {
+      id?: true
+      name?: true
+      createdAt?: true
+      updatedAt?: true
+      userId?: true
+      _all?: true
+   }
+
+   export type ArticleAggregateArgs = {
+      /**
+       * Filter which Article to aggregate.
+       */
+      where?: ArticleWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Articles to fetch.
+       */
+      orderBy?: Enumerable<ArticleOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the start position
+       */
+      cursor?: ArticleWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Articles from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Articles.
+       */
+      skip?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Count returned Articles
+       **/
+      _count?: true | ArticleCountAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to average
+       **/
+      _avg?: ArticleAvgAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to sum
+       **/
+      _sum?: ArticleSumAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to find the minimum value
+       **/
+      _min?: ArticleMinAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to find the maximum value
+       **/
+      _max?: ArticleMaxAggregateInputType
+   }
+
+   export type GetArticleAggregateType<T extends ArticleAggregateArgs> = {
+      [P in keyof T & keyof AggregateArticle]: P extends '_count' | 'count'
+         ? T[P] extends true
+            ? number
+            : GetScalarType<T[P], AggregateArticle[P]>
+         : GetScalarType<T[P], AggregateArticle[P]>
+   }
+
+   export type ArticleGroupByArgs = {
+      where?: ArticleWhereInput
+      orderBy?: Enumerable<ArticleOrderByWithAggregationInput>
+      by: ArticleScalarFieldEnum[]
+      having?: ArticleScalarWhereWithAggregatesInput
+      take?: number
+      skip?: number
+      _count?: ArticleCountAggregateInputType | true
+      _avg?: ArticleAvgAggregateInputType
+      _sum?: ArticleSumAggregateInputType
+      _min?: ArticleMinAggregateInputType
+      _max?: ArticleMaxAggregateInputType
+   }
+
+   export type ArticleGroupByOutputType = {
+      id: number
+      name: string
+      createdAt: Date
+      updatedAt: Date
+      userId: number
+      _count: ArticleCountAggregateOutputType | null
+      _avg: ArticleAvgAggregateOutputType | null
+      _sum: ArticleSumAggregateOutputType | null
+      _min: ArticleMinAggregateOutputType | null
+      _max: ArticleMaxAggregateOutputType | null
+   }
+
+   type GetArticleGroupByPayload<T extends ArticleGroupByArgs> =
+      Prisma.PrismaPromise<
+         Array<
+            PickArray<ArticleGroupByOutputType, T['by']> & {
+               [P in keyof T &
+                  keyof ArticleGroupByOutputType]: P extends '_count'
+                  ? T[P] extends boolean
+                     ? number
+                     : GetScalarType<T[P], ArticleGroupByOutputType[P]>
+                  : GetScalarType<T[P], ArticleGroupByOutputType[P]>
+            }
+         >
+      >
+
+   export type ArticleSelect = {
+      id?: boolean
+      name?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      userId?: boolean
+      user?: boolean | UserArgs
+      chapter?: boolean | Article$chapterArgs
+      _count?: boolean | ArticleCountOutputTypeArgs
+   }
+
+   export type ArticleInclude = {
+      user?: boolean | UserArgs
+      chapter?: boolean | Article$chapterArgs
+      _count?: boolean | ArticleCountOutputTypeArgs
+   }
+
+   export type ArticleGetPayload<
+      S extends boolean | null | undefined | ArticleArgs,
+   > = S extends { select: any; include: any }
+      ? 'Please either choose `select` or `include`'
+      : S extends true
+      ? Article
+      : S extends undefined
+      ? never
+      : S extends { include: any } & (ArticleArgs | ArticleFindManyArgs)
+      ? Article & {
+           [P in TruthyKeys<S['include']>]: P extends 'user'
+              ? UserGetPayload<S['include'][P]>
+              : P extends 'chapter'
+              ? Array<ChapterGetPayload<S['include'][P]>>
+              : P extends '_count'
+              ? ArticleCountOutputTypeGetPayload<S['include'][P]>
+              : never
+        }
+      : S extends { select: any } & (ArticleArgs | ArticleFindManyArgs)
+      ? {
+           [P in TruthyKeys<S['select']>]: P extends 'user'
+              ? UserGetPayload<S['select'][P]>
+              : P extends 'chapter'
+              ? Array<ChapterGetPayload<S['select'][P]>>
+              : P extends '_count'
+              ? ArticleCountOutputTypeGetPayload<S['select'][P]>
+              : P extends keyof Article
+              ? Article[P]
+              : never
+        }
+      : Article
+
+   type ArticleCountArgs = Omit<ArticleFindManyArgs, 'select' | 'include'> & {
+      select?: ArticleCountAggregateInputType | true
+   }
+
+   export interface ArticleDelegate<
+      GlobalRejectSettings extends
+         | Prisma.RejectOnNotFound
+         | Prisma.RejectPerOperation
+         | false
+         | undefined,
+   > {
+      /**
+       * Find zero or one Article that matches the filter.
+       * @param {ArticleFindUniqueArgs} args - Arguments to find a Article
+       * @example
+       * // Get one Article
+       * const article = await prisma.article.findUnique({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findUnique<
+         T extends ArticleFindUniqueArgs,
+         LocalRejectSettings = T['rejectOnNotFound'] extends RejectOnNotFound
+            ? T['rejectOnNotFound']
+            : undefined,
+      >(
+         args: SelectSubset<T, ArticleFindUniqueArgs>,
+      ): HasReject<
+         GlobalRejectSettings,
+         LocalRejectSettings,
+         'findUnique',
+         'Article'
+      > extends True
+         ? Prisma__ArticleClient<ArticleGetPayload<T>>
+         : Prisma__ArticleClient<ArticleGetPayload<T> | null, null>
+
+      /**
+       * Find one Article that matches the filter or throw an error  with `error.code='P2025'`
+       *     if no matches were found.
+       * @param {ArticleFindUniqueOrThrowArgs} args - Arguments to find a Article
+       * @example
+       * // Get one Article
+       * const article = await prisma.article.findUniqueOrThrow({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findUniqueOrThrow<T extends ArticleFindUniqueOrThrowArgs>(
+         args?: SelectSubset<T, ArticleFindUniqueOrThrowArgs>,
+      ): Prisma__ArticleClient<ArticleGetPayload<T>>
+
+      /**
+       * Find the first Article that matches the filter.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ArticleFindFirstArgs} args - Arguments to find a Article
+       * @example
+       * // Get one Article
+       * const article = await prisma.article.findFirst({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findFirst<
+         T extends ArticleFindFirstArgs,
+         LocalRejectSettings = T['rejectOnNotFound'] extends RejectOnNotFound
+            ? T['rejectOnNotFound']
+            : undefined,
+      >(
+         args?: SelectSubset<T, ArticleFindFirstArgs>,
+      ): HasReject<
+         GlobalRejectSettings,
+         LocalRejectSettings,
+         'findFirst',
+         'Article'
+      > extends True
+         ? Prisma__ArticleClient<ArticleGetPayload<T>>
+         : Prisma__ArticleClient<ArticleGetPayload<T> | null, null>
+
+      /**
+       * Find the first Article that matches the filter or
+       * throw `NotFoundError` if no matches were found.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ArticleFindFirstOrThrowArgs} args - Arguments to find a Article
+       * @example
+       * // Get one Article
+       * const article = await prisma.article.findFirstOrThrow({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findFirstOrThrow<T extends ArticleFindFirstOrThrowArgs>(
+         args?: SelectSubset<T, ArticleFindFirstOrThrowArgs>,
+      ): Prisma__ArticleClient<ArticleGetPayload<T>>
+
+      /**
+       * Find zero or more Articles that matches the filter.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ArticleFindManyArgs=} args - Arguments to filter and select certain fields only.
+       * @example
+       * // Get all Articles
+       * const articles = await prisma.article.findMany()
+       *
+       * // Get first 10 Articles
+       * const articles = await prisma.article.findMany({ take: 10 })
+       *
+       * // Only select the `id`
+       * const articleWithIdOnly = await prisma.article.findMany({ select: { id: true } })
+       *
+       **/
+      findMany<T extends ArticleFindManyArgs>(
+         args?: SelectSubset<T, ArticleFindManyArgs>,
+      ): Prisma.PrismaPromise<Array<ArticleGetPayload<T>>>
+
+      /**
+       * Create a Article.
+       * @param {ArticleCreateArgs} args - Arguments to create a Article.
+       * @example
+       * // Create one Article
+       * const Article = await prisma.article.create({
+       *   data: {
+       *     // ... data to create a Article
+       *   }
+       * })
+       *
+       **/
+      create<T extends ArticleCreateArgs>(
+         args: SelectSubset<T, ArticleCreateArgs>,
+      ): Prisma__ArticleClient<ArticleGetPayload<T>>
+
+      /**
+       * Create many Articles.
+       *     @param {ArticleCreateManyArgs} args - Arguments to create many Articles.
+       *     @example
+       *     // Create many Articles
+       *     const article = await prisma.article.createMany({
+       *       data: {
+       *         // ... provide data here
+       *       }
+       *     })
+       *
+       **/
+      createMany<T extends ArticleCreateManyArgs>(
+         args?: SelectSubset<T, ArticleCreateManyArgs>,
+      ): Prisma.PrismaPromise<BatchPayload>
+
+      /**
+       * Delete a Article.
+       * @param {ArticleDeleteArgs} args - Arguments to delete one Article.
+       * @example
+       * // Delete one Article
+       * const Article = await prisma.article.delete({
+       *   where: {
+       *     // ... filter to delete one Article
+       *   }
+       * })
+       *
+       **/
+      delete<T extends ArticleDeleteArgs>(
+         args: SelectSubset<T, ArticleDeleteArgs>,
+      ): Prisma__ArticleClient<ArticleGetPayload<T>>
+
+      /**
+       * Update one Article.
+       * @param {ArticleUpdateArgs} args - Arguments to update one Article.
+       * @example
+       * // Update one Article
+       * const article = await prisma.article.update({
+       *   where: {
+       *     // ... provide filter here
+       *   },
+       *   data: {
+       *     // ... provide data here
+       *   }
+       * })
+       *
+       **/
+      update<T extends ArticleUpdateArgs>(
+         args: SelectSubset<T, ArticleUpdateArgs>,
+      ): Prisma__ArticleClient<ArticleGetPayload<T>>
+
+      /**
+       * Delete zero or more Articles.
+       * @param {ArticleDeleteManyArgs} args - Arguments to filter Articles to delete.
+       * @example
+       * // Delete a few Articles
+       * const { count } = await prisma.article.deleteMany({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       *
+       **/
+      deleteMany<T extends ArticleDeleteManyArgs>(
+         args?: SelectSubset<T, ArticleDeleteManyArgs>,
+      ): Prisma.PrismaPromise<BatchPayload>
+
+      /**
+       * Update zero or more Articles.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ArticleUpdateManyArgs} args - Arguments to update one or more rows.
+       * @example
+       * // Update many Articles
+       * const article = await prisma.article.updateMany({
+       *   where: {
+       *     // ... provide filter here
+       *   },
+       *   data: {
+       *     // ... provide data here
+       *   }
+       * })
+       *
+       **/
+      updateMany<T extends ArticleUpdateManyArgs>(
+         args: SelectSubset<T, ArticleUpdateManyArgs>,
+      ): Prisma.PrismaPromise<BatchPayload>
+
+      /**
+       * Create or update one Article.
+       * @param {ArticleUpsertArgs} args - Arguments to update or create a Article.
+       * @example
+       * // Update or create a Article
+       * const article = await prisma.article.upsert({
+       *   create: {
+       *     // ... data to create a Article
+       *   },
+       *   update: {
+       *     // ... in case it already exists, update
+       *   },
+       *   where: {
+       *     // ... the filter for the Article we want to update
+       *   }
+       * })
+       **/
+      upsert<T extends ArticleUpsertArgs>(
+         args: SelectSubset<T, ArticleUpsertArgs>,
+      ): Prisma__ArticleClient<ArticleGetPayload<T>>
+
+      /**
+       * Count the number of Articles.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ArticleCountArgs} args - Arguments to filter Articles to count.
+       * @example
+       * // Count the number of Articles
+       * const count = await prisma.article.count({
+       *   where: {
+       *     // ... the filter for the Articles we want to count
+       *   }
+       * })
+       **/
+      count<T extends ArticleCountArgs>(
+         args?: Subset<T, ArticleCountArgs>,
+      ): Prisma.PrismaPromise<
+         T extends _Record<'select', any>
+            ? T['select'] extends true
+               ? number
+               : GetScalarType<T['select'], ArticleCountAggregateOutputType>
+            : number
+      >
+
+      /**
+       * Allows you to perform aggregations operations on a Article.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ArticleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+       * @example
+       * // Ordered by age ascending
+       * // Where email contains prisma.io
+       * // Limited to the 10 users
+       * const aggregations = await prisma.user.aggregate({
+       *   _avg: {
+       *     age: true,
+       *   },
+       *   where: {
+       *     email: {
+       *       contains: "prisma.io",
+       *     },
+       *   },
+       *   orderBy: {
+       *     age: "asc",
+       *   },
+       *   take: 10,
+       * })
+       **/
+      aggregate<T extends ArticleAggregateArgs>(
+         args: Subset<T, ArticleAggregateArgs>,
+      ): Prisma.PrismaPromise<GetArticleAggregateType<T>>
+
+      /**
+       * Group by Article.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ArticleGroupByArgs} args - Group by arguments.
+       * @example
+       * // Group by city, order by createdAt, get count
+       * const result = await prisma.user.groupBy({
+       *   by: ['city', 'createdAt'],
+       *   orderBy: {
+       *     createdAt: true
+       *   },
+       *   _count: {
+       *     _all: true
+       *   },
+       * })
+       *
+       **/
+      groupBy<
+         T extends ArticleGroupByArgs,
+         HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+         >,
+         OrderByArg extends True extends HasSelectOrTake
+            ? { orderBy: ArticleGroupByArgs['orderBy'] }
+            : { orderBy?: ArticleGroupByArgs['orderBy'] },
+         OrderFields extends ExcludeUnderscoreKeys<
+            Keys<MaybeTupleToUnion<T['orderBy']>>
+         >,
+         ByFields extends TupleToUnion<T['by']>,
+         ByValid extends Has<ByFields, OrderFields>,
+         HavingFields extends GetHavingFields<T['having']>,
+         HavingValid extends Has<ByFields, HavingFields>,
+         ByEmpty extends T['by'] extends never[] ? True : False,
+         InputErrors extends ByEmpty extends True
+            ? `Error: "by" must not be empty.`
+            : HavingValid extends False
+            ? {
+                 [P in HavingFields]: P extends ByFields
+                    ? never
+                    : P extends string
+                    ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                    : [
+                         Error,
+                         'Field ',
+                         P,
+                         ` in "having" needs to be provided in "by"`,
+                      ]
+              }[HavingFields]
+            : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+               ? ByValid extends True
+                  ? {}
+                  : {
+                       [P in OrderFields]: P extends ByFields
+                          ? never
+                          : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+               : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+               ? ByValid extends True
+                  ? {}
+                  : {
+                       [P in OrderFields]: P extends ByFields
+                          ? never
+                          : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+               : 'Error: If you provide "skip", you also need to provide "orderBy"'
+            : ByValid extends True
+            ? {}
+            : {
+                 [P in OrderFields]: P extends ByFields
+                    ? never
+                    : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields],
+      >(
+         args: SubsetIntersection<T, ArticleGroupByArgs, OrderByArg> &
+            InputErrors,
+      ): {} extends InputErrors
+         ? GetArticleGroupByPayload<T>
+         : Prisma.PrismaPromise<InputErrors>
+   }
+
+   /**
+    * The delegate class that acts as a "Promise-like" for Article.
+    * Why is this prefixed with `Prisma__`?
+    * Because we want to prevent naming conflicts as mentioned in
+    * https://github.com/prisma/prisma-client-js/issues/707
+    */
+   export class Prisma__ArticleClient<T, Null = never>
+      implements Prisma.PrismaPromise<T>
+   {
+      private readonly _dmmf
+      private readonly _queryType
+      private readonly _rootField
+      private readonly _clientMethod
+      private readonly _args
+      private readonly _dataPath
+      private readonly _errorFormat
+      private readonly _measurePerformance?
+      private _isList
+      private _callsite
+      private _requestPromise?;
+      readonly [Symbol.toStringTag]: 'PrismaPromise'
+      constructor(
+         _dmmf: runtime.DMMFClass,
+         _queryType: 'query' | 'mutation',
+         _rootField: string,
+         _clientMethod: string,
+         _args: any,
+         _dataPath: string[],
+         _errorFormat: ErrorFormat,
+         _measurePerformance?: boolean | undefined,
+         _isList?: boolean,
+      )
+
+      user<T extends UserArgs = {}>(
+         args?: Subset<T, UserArgs>,
+      ): Prisma__UserClient<UserGetPayload<T> | Null>
+
+      chapter<T extends Article$chapterArgs = {}>(
+         args?: Subset<T, Article$chapterArgs>,
+      ): Prisma.PrismaPromise<Array<ChapterGetPayload<T>> | Null>
+
+      private get _document()
+      /**
+       * Attaches callbacks for the resolution and/or rejection of the Promise.
+       * @param onfulfilled The callback to execute when the Promise is resolved.
+       * @param onrejected The callback to execute when the Promise is rejected.
+       * @returns A Promise for the completion of which ever callback is executed.
+       */
+      then<TResult1 = T, TResult2 = never>(
+         onfulfilled?:
+            | ((value: T) => TResult1 | PromiseLike<TResult1>)
+            | undefined
+            | null,
+         onrejected?:
+            | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+            | undefined
+            | null,
+      ): Promise<TResult1 | TResult2>
+      /**
+       * Attaches a callback for only the rejection of the Promise.
+       * @param onrejected The callback to execute when the Promise is rejected.
+       * @returns A Promise for the completion of the callback.
+       */
+      catch<TResult = never>(
+         onrejected?:
+            | ((reason: any) => TResult | PromiseLike<TResult>)
+            | undefined
+            | null,
+      ): Promise<T | TResult>
+      /**
+       * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+       * resolved value cannot be modified from the callback.
+       * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+       * @returns A Promise for the completion of the callback.
+       */
+      finally(onfinally?: (() => void) | undefined | null): Promise<T>
+   }
+
+   // Custom InputTypes
+
+   /**
+    * Article base type for findUnique actions
+    */
+   export type ArticleFindUniqueArgsBase = {
+      /**
+       * Select specific fields to fetch from the Article
+       */
+      select?: ArticleSelect | null
       /**
        * Choose, which related nodes to fetch as well.
        */
-      include?: ProjectInclude | null
+      include?: ArticleInclude | null
       /**
-       * The data needed to update a Project.
+       * Filter, which Article to fetch.
        */
-      data: XOR<ProjectUpdateInput, ProjectUncheckedUpdateInput>
-      /**
-       * Choose, which Project to update.
-       */
-      where: ProjectWhereUniqueInput
+      where: ArticleWhereUniqueInput
    }
 
    /**
-    * Project updateMany
+    * Article findUnique
     */
-   export type ProjectUpdateManyArgs = {
+   export interface ArticleFindUniqueArgs extends ArticleFindUniqueArgsBase {
       /**
-       * The data used to update Projects.
+       * Throw an Error if query returns no results
+       * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
        */
-      data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyInput>
-      /**
-       * Filter which Projects to update
-       */
-      where?: ProjectWhereInput
+      rejectOnNotFound?: RejectOnNotFound
    }
 
    /**
-    * Project upsert
+    * Article findUniqueOrThrow
     */
-   export type ProjectUpsertArgs = {
+   export type ArticleFindUniqueOrThrowArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the Article
        */
-      select?: ProjectSelect | null
+      select?: ArticleSelect | null
       /**
        * Choose, which related nodes to fetch as well.
        */
-      include?: ProjectInclude | null
+      include?: ArticleInclude | null
       /**
-       * The filter to search for the Project to update in case it exists.
+       * Filter, which Article to fetch.
        */
-      where: ProjectWhereUniqueInput
-      /**
-       * In case the Project found by the `where` argument doesn't exist, create a new Project with this data.
-       */
-      create: XOR<ProjectCreateInput, ProjectUncheckedCreateInput>
-      /**
-       * In case the Project was found with the provided `where` argument, update it with this data.
-       */
-      update: XOR<ProjectUpdateInput, ProjectUncheckedUpdateInput>
+      where: ArticleWhereUniqueInput
    }
 
    /**
-    * Project delete
+    * Article base type for findFirst actions
     */
-   export type ProjectDeleteArgs = {
+   export type ArticleFindFirstArgsBase = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the Article
        */
-      select?: ProjectSelect | null
+      select?: ArticleSelect | null
       /**
        * Choose, which related nodes to fetch as well.
        */
-      include?: ProjectInclude | null
+      include?: ArticleInclude | null
       /**
-       * Filter which Project to delete.
+       * Filter, which Article to fetch.
        */
-      where: ProjectWhereUniqueInput
+      where?: ArticleWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Articles to fetch.
+       */
+      orderBy?: Enumerable<ArticleOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the position for searching for Articles.
+       */
+      cursor?: ArticleWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Articles from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Articles.
+       */
+      skip?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+       *
+       * Filter by unique combinations of Articles.
+       */
+      distinct?: Enumerable<ArticleScalarFieldEnum>
    }
 
    /**
-    * Project deleteMany
+    * Article findFirst
     */
-   export type ProjectDeleteManyArgs = {
+   export interface ArticleFindFirstArgs extends ArticleFindFirstArgsBase {
       /**
-       * Filter which Projects to delete
+       * Throw an Error if query returns no results
+       * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
        */
-      where?: ProjectWhereInput
+      rejectOnNotFound?: RejectOnNotFound
    }
 
    /**
-    * Project without action
+    * Article findFirstOrThrow
     */
-   export type ProjectArgs = {
+   export type ArticleFindFirstOrThrowArgs = {
       /**
-       * Select specific fields to fetch from the Project
+       * Select specific fields to fetch from the Article
        */
-      select?: ProjectSelect | null
+      select?: ArticleSelect | null
       /**
        * Choose, which related nodes to fetch as well.
        */
-      include?: ProjectInclude | null
+      include?: ArticleInclude | null
+      /**
+       * Filter, which Article to fetch.
+       */
+      where?: ArticleWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Articles to fetch.
+       */
+      orderBy?: Enumerable<ArticleOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the position for searching for Articles.
+       */
+      cursor?: ArticleWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Articles from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Articles.
+       */
+      skip?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+       *
+       * Filter by unique combinations of Articles.
+       */
+      distinct?: Enumerable<ArticleScalarFieldEnum>
+   }
+
+   /**
+    * Article findMany
+    */
+   export type ArticleFindManyArgs = {
+      /**
+       * Select specific fields to fetch from the Article
+       */
+      select?: ArticleSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ArticleInclude | null
+      /**
+       * Filter, which Articles to fetch.
+       */
+      where?: ArticleWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Articles to fetch.
+       */
+      orderBy?: Enumerable<ArticleOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the position for listing Articles.
+       */
+      cursor?: ArticleWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Articles from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Articles.
+       */
+      skip?: number
+      distinct?: Enumerable<ArticleScalarFieldEnum>
+   }
+
+   /**
+    * Article create
+    */
+   export type ArticleCreateArgs = {
+      /**
+       * Select specific fields to fetch from the Article
+       */
+      select?: ArticleSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ArticleInclude | null
+      /**
+       * The data needed to create a Article.
+       */
+      data: XOR<ArticleCreateInput, ArticleUncheckedCreateInput>
+   }
+
+   /**
+    * Article createMany
+    */
+   export type ArticleCreateManyArgs = {
+      /**
+       * The data used to create many Articles.
+       */
+      data: Enumerable<ArticleCreateManyInput>
+      skipDuplicates?: boolean
+   }
+
+   /**
+    * Article update
+    */
+   export type ArticleUpdateArgs = {
+      /**
+       * Select specific fields to fetch from the Article
+       */
+      select?: ArticleSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ArticleInclude | null
+      /**
+       * The data needed to update a Article.
+       */
+      data: XOR<ArticleUpdateInput, ArticleUncheckedUpdateInput>
+      /**
+       * Choose, which Article to update.
+       */
+      where: ArticleWhereUniqueInput
+   }
+
+   /**
+    * Article updateMany
+    */
+   export type ArticleUpdateManyArgs = {
+      /**
+       * The data used to update Articles.
+       */
+      data: XOR<ArticleUpdateManyMutationInput, ArticleUncheckedUpdateManyInput>
+      /**
+       * Filter which Articles to update
+       */
+      where?: ArticleWhereInput
+   }
+
+   /**
+    * Article upsert
+    */
+   export type ArticleUpsertArgs = {
+      /**
+       * Select specific fields to fetch from the Article
+       */
+      select?: ArticleSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ArticleInclude | null
+      /**
+       * The filter to search for the Article to update in case it exists.
+       */
+      where: ArticleWhereUniqueInput
+      /**
+       * In case the Article found by the `where` argument doesn't exist, create a new Article with this data.
+       */
+      create: XOR<ArticleCreateInput, ArticleUncheckedCreateInput>
+      /**
+       * In case the Article was found with the provided `where` argument, update it with this data.
+       */
+      update: XOR<ArticleUpdateInput, ArticleUncheckedUpdateInput>
+   }
+
+   /**
+    * Article delete
+    */
+   export type ArticleDeleteArgs = {
+      /**
+       * Select specific fields to fetch from the Article
+       */
+      select?: ArticleSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ArticleInclude | null
+      /**
+       * Filter which Article to delete.
+       */
+      where: ArticleWhereUniqueInput
+   }
+
+   /**
+    * Article deleteMany
+    */
+   export type ArticleDeleteManyArgs = {
+      /**
+       * Filter which Articles to delete
+       */
+      where?: ArticleWhereInput
+   }
+
+   /**
+    * Article.chapter
+    */
+   export type Article$chapterArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      where?: ChapterWhereInput
+      orderBy?: Enumerable<ChapterOrderByWithRelationInput>
+      cursor?: ChapterWhereUniqueInput
+      take?: number
+      skip?: number
+      distinct?: Enumerable<ChapterScalarFieldEnum>
+   }
+
+   /**
+    * Article without action
+    */
+   export type ArticleArgs = {
+      /**
+       * Select specific fields to fetch from the Article
+       */
+      select?: ArticleSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ArticleInclude | null
+   }
+
+   /**
+    * Model Chapter
+    */
+
+   export type AggregateChapter = {
+      _count: ChapterCountAggregateOutputType | null
+      _avg: ChapterAvgAggregateOutputType | null
+      _sum: ChapterSumAggregateOutputType | null
+      _min: ChapterMinAggregateOutputType | null
+      _max: ChapterMaxAggregateOutputType | null
+   }
+
+   export type ChapterAvgAggregateOutputType = {
+      id: number | null
+      articleId: number | null
+   }
+
+   export type ChapterSumAggregateOutputType = {
+      id: number | null
+      articleId: number | null
+   }
+
+   export type ChapterMinAggregateOutputType = {
+      id: number | null
+      name: string | null
+      createdAt: Date | null
+      updatedAt: Date | null
+      articleId: number | null
+   }
+
+   export type ChapterMaxAggregateOutputType = {
+      id: number | null
+      name: string | null
+      createdAt: Date | null
+      updatedAt: Date | null
+      articleId: number | null
+   }
+
+   export type ChapterCountAggregateOutputType = {
+      id: number
+      name: number
+      createdAt: number
+      updatedAt: number
+      articleId: number
+      _all: number
+   }
+
+   export type ChapterAvgAggregateInputType = {
+      id?: true
+      articleId?: true
+   }
+
+   export type ChapterSumAggregateInputType = {
+      id?: true
+      articleId?: true
+   }
+
+   export type ChapterMinAggregateInputType = {
+      id?: true
+      name?: true
+      createdAt?: true
+      updatedAt?: true
+      articleId?: true
+   }
+
+   export type ChapterMaxAggregateInputType = {
+      id?: true
+      name?: true
+      createdAt?: true
+      updatedAt?: true
+      articleId?: true
+   }
+
+   export type ChapterCountAggregateInputType = {
+      id?: true
+      name?: true
+      createdAt?: true
+      updatedAt?: true
+      articleId?: true
+      _all?: true
+   }
+
+   export type ChapterAggregateArgs = {
+      /**
+       * Filter which Chapter to aggregate.
+       */
+      where?: ChapterWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Chapters to fetch.
+       */
+      orderBy?: Enumerable<ChapterOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the start position
+       */
+      cursor?: ChapterWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Chapters from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Chapters.
+       */
+      skip?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Count returned Chapters
+       **/
+      _count?: true | ChapterCountAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to average
+       **/
+      _avg?: ChapterAvgAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to sum
+       **/
+      _sum?: ChapterSumAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to find the minimum value
+       **/
+      _min?: ChapterMinAggregateInputType
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+       *
+       * Select which fields to find the maximum value
+       **/
+      _max?: ChapterMaxAggregateInputType
+   }
+
+   export type GetChapterAggregateType<T extends ChapterAggregateArgs> = {
+      [P in keyof T & keyof AggregateChapter]: P extends '_count' | 'count'
+         ? T[P] extends true
+            ? number
+            : GetScalarType<T[P], AggregateChapter[P]>
+         : GetScalarType<T[P], AggregateChapter[P]>
+   }
+
+   export type ChapterGroupByArgs = {
+      where?: ChapterWhereInput
+      orderBy?: Enumerable<ChapterOrderByWithAggregationInput>
+      by: ChapterScalarFieldEnum[]
+      having?: ChapterScalarWhereWithAggregatesInput
+      take?: number
+      skip?: number
+      _count?: ChapterCountAggregateInputType | true
+      _avg?: ChapterAvgAggregateInputType
+      _sum?: ChapterSumAggregateInputType
+      _min?: ChapterMinAggregateInputType
+      _max?: ChapterMaxAggregateInputType
+   }
+
+   export type ChapterGroupByOutputType = {
+      id: number
+      name: string
+      createdAt: Date
+      updatedAt: Date
+      articleId: number
+      _count: ChapterCountAggregateOutputType | null
+      _avg: ChapterAvgAggregateOutputType | null
+      _sum: ChapterSumAggregateOutputType | null
+      _min: ChapterMinAggregateOutputType | null
+      _max: ChapterMaxAggregateOutputType | null
+   }
+
+   type GetChapterGroupByPayload<T extends ChapterGroupByArgs> =
+      Prisma.PrismaPromise<
+         Array<
+            PickArray<ChapterGroupByOutputType, T['by']> & {
+               [P in keyof T &
+                  keyof ChapterGroupByOutputType]: P extends '_count'
+                  ? T[P] extends boolean
+                     ? number
+                     : GetScalarType<T[P], ChapterGroupByOutputType[P]>
+                  : GetScalarType<T[P], ChapterGroupByOutputType[P]>
+            }
+         >
+      >
+
+   export type ChapterSelect = {
+      id?: boolean
+      name?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      articleId?: boolean
+      article?: boolean | ArticleArgs
+   }
+
+   export type ChapterInclude = {
+      article?: boolean | ArticleArgs
+   }
+
+   export type ChapterGetPayload<
+      S extends boolean | null | undefined | ChapterArgs,
+   > = S extends { select: any; include: any }
+      ? 'Please either choose `select` or `include`'
+      : S extends true
+      ? Chapter
+      : S extends undefined
+      ? never
+      : S extends { include: any } & (ChapterArgs | ChapterFindManyArgs)
+      ? Chapter & {
+           [P in TruthyKeys<S['include']>]: P extends 'article'
+              ? ArticleGetPayload<S['include'][P]>
+              : never
+        }
+      : S extends { select: any } & (ChapterArgs | ChapterFindManyArgs)
+      ? {
+           [P in TruthyKeys<S['select']>]: P extends 'article'
+              ? ArticleGetPayload<S['select'][P]>
+              : P extends keyof Chapter
+              ? Chapter[P]
+              : never
+        }
+      : Chapter
+
+   type ChapterCountArgs = Omit<ChapterFindManyArgs, 'select' | 'include'> & {
+      select?: ChapterCountAggregateInputType | true
+   }
+
+   export interface ChapterDelegate<
+      GlobalRejectSettings extends
+         | Prisma.RejectOnNotFound
+         | Prisma.RejectPerOperation
+         | false
+         | undefined,
+   > {
+      /**
+       * Find zero or one Chapter that matches the filter.
+       * @param {ChapterFindUniqueArgs} args - Arguments to find a Chapter
+       * @example
+       * // Get one Chapter
+       * const chapter = await prisma.chapter.findUnique({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findUnique<
+         T extends ChapterFindUniqueArgs,
+         LocalRejectSettings = T['rejectOnNotFound'] extends RejectOnNotFound
+            ? T['rejectOnNotFound']
+            : undefined,
+      >(
+         args: SelectSubset<T, ChapterFindUniqueArgs>,
+      ): HasReject<
+         GlobalRejectSettings,
+         LocalRejectSettings,
+         'findUnique',
+         'Chapter'
+      > extends True
+         ? Prisma__ChapterClient<ChapterGetPayload<T>>
+         : Prisma__ChapterClient<ChapterGetPayload<T> | null, null>
+
+      /**
+       * Find one Chapter that matches the filter or throw an error  with `error.code='P2025'`
+       *     if no matches were found.
+       * @param {ChapterFindUniqueOrThrowArgs} args - Arguments to find a Chapter
+       * @example
+       * // Get one Chapter
+       * const chapter = await prisma.chapter.findUniqueOrThrow({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findUniqueOrThrow<T extends ChapterFindUniqueOrThrowArgs>(
+         args?: SelectSubset<T, ChapterFindUniqueOrThrowArgs>,
+      ): Prisma__ChapterClient<ChapterGetPayload<T>>
+
+      /**
+       * Find the first Chapter that matches the filter.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ChapterFindFirstArgs} args - Arguments to find a Chapter
+       * @example
+       * // Get one Chapter
+       * const chapter = await prisma.chapter.findFirst({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findFirst<
+         T extends ChapterFindFirstArgs,
+         LocalRejectSettings = T['rejectOnNotFound'] extends RejectOnNotFound
+            ? T['rejectOnNotFound']
+            : undefined,
+      >(
+         args?: SelectSubset<T, ChapterFindFirstArgs>,
+      ): HasReject<
+         GlobalRejectSettings,
+         LocalRejectSettings,
+         'findFirst',
+         'Chapter'
+      > extends True
+         ? Prisma__ChapterClient<ChapterGetPayload<T>>
+         : Prisma__ChapterClient<ChapterGetPayload<T> | null, null>
+
+      /**
+       * Find the first Chapter that matches the filter or
+       * throw `NotFoundError` if no matches were found.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ChapterFindFirstOrThrowArgs} args - Arguments to find a Chapter
+       * @example
+       * // Get one Chapter
+       * const chapter = await prisma.chapter.findFirstOrThrow({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       **/
+      findFirstOrThrow<T extends ChapterFindFirstOrThrowArgs>(
+         args?: SelectSubset<T, ChapterFindFirstOrThrowArgs>,
+      ): Prisma__ChapterClient<ChapterGetPayload<T>>
+
+      /**
+       * Find zero or more Chapters that matches the filter.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ChapterFindManyArgs=} args - Arguments to filter and select certain fields only.
+       * @example
+       * // Get all Chapters
+       * const chapters = await prisma.chapter.findMany()
+       *
+       * // Get first 10 Chapters
+       * const chapters = await prisma.chapter.findMany({ take: 10 })
+       *
+       * // Only select the `id`
+       * const chapterWithIdOnly = await prisma.chapter.findMany({ select: { id: true } })
+       *
+       **/
+      findMany<T extends ChapterFindManyArgs>(
+         args?: SelectSubset<T, ChapterFindManyArgs>,
+      ): Prisma.PrismaPromise<Array<ChapterGetPayload<T>>>
+
+      /**
+       * Create a Chapter.
+       * @param {ChapterCreateArgs} args - Arguments to create a Chapter.
+       * @example
+       * // Create one Chapter
+       * const Chapter = await prisma.chapter.create({
+       *   data: {
+       *     // ... data to create a Chapter
+       *   }
+       * })
+       *
+       **/
+      create<T extends ChapterCreateArgs>(
+         args: SelectSubset<T, ChapterCreateArgs>,
+      ): Prisma__ChapterClient<ChapterGetPayload<T>>
+
+      /**
+       * Create many Chapters.
+       *     @param {ChapterCreateManyArgs} args - Arguments to create many Chapters.
+       *     @example
+       *     // Create many Chapters
+       *     const chapter = await prisma.chapter.createMany({
+       *       data: {
+       *         // ... provide data here
+       *       }
+       *     })
+       *
+       **/
+      createMany<T extends ChapterCreateManyArgs>(
+         args?: SelectSubset<T, ChapterCreateManyArgs>,
+      ): Prisma.PrismaPromise<BatchPayload>
+
+      /**
+       * Delete a Chapter.
+       * @param {ChapterDeleteArgs} args - Arguments to delete one Chapter.
+       * @example
+       * // Delete one Chapter
+       * const Chapter = await prisma.chapter.delete({
+       *   where: {
+       *     // ... filter to delete one Chapter
+       *   }
+       * })
+       *
+       **/
+      delete<T extends ChapterDeleteArgs>(
+         args: SelectSubset<T, ChapterDeleteArgs>,
+      ): Prisma__ChapterClient<ChapterGetPayload<T>>
+
+      /**
+       * Update one Chapter.
+       * @param {ChapterUpdateArgs} args - Arguments to update one Chapter.
+       * @example
+       * // Update one Chapter
+       * const chapter = await prisma.chapter.update({
+       *   where: {
+       *     // ... provide filter here
+       *   },
+       *   data: {
+       *     // ... provide data here
+       *   }
+       * })
+       *
+       **/
+      update<T extends ChapterUpdateArgs>(
+         args: SelectSubset<T, ChapterUpdateArgs>,
+      ): Prisma__ChapterClient<ChapterGetPayload<T>>
+
+      /**
+       * Delete zero or more Chapters.
+       * @param {ChapterDeleteManyArgs} args - Arguments to filter Chapters to delete.
+       * @example
+       * // Delete a few Chapters
+       * const { count } = await prisma.chapter.deleteMany({
+       *   where: {
+       *     // ... provide filter here
+       *   }
+       * })
+       *
+       **/
+      deleteMany<T extends ChapterDeleteManyArgs>(
+         args?: SelectSubset<T, ChapterDeleteManyArgs>,
+      ): Prisma.PrismaPromise<BatchPayload>
+
+      /**
+       * Update zero or more Chapters.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ChapterUpdateManyArgs} args - Arguments to update one or more rows.
+       * @example
+       * // Update many Chapters
+       * const chapter = await prisma.chapter.updateMany({
+       *   where: {
+       *     // ... provide filter here
+       *   },
+       *   data: {
+       *     // ... provide data here
+       *   }
+       * })
+       *
+       **/
+      updateMany<T extends ChapterUpdateManyArgs>(
+         args: SelectSubset<T, ChapterUpdateManyArgs>,
+      ): Prisma.PrismaPromise<BatchPayload>
+
+      /**
+       * Create or update one Chapter.
+       * @param {ChapterUpsertArgs} args - Arguments to update or create a Chapter.
+       * @example
+       * // Update or create a Chapter
+       * const chapter = await prisma.chapter.upsert({
+       *   create: {
+       *     // ... data to create a Chapter
+       *   },
+       *   update: {
+       *     // ... in case it already exists, update
+       *   },
+       *   where: {
+       *     // ... the filter for the Chapter we want to update
+       *   }
+       * })
+       **/
+      upsert<T extends ChapterUpsertArgs>(
+         args: SelectSubset<T, ChapterUpsertArgs>,
+      ): Prisma__ChapterClient<ChapterGetPayload<T>>
+
+      /**
+       * Count the number of Chapters.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ChapterCountArgs} args - Arguments to filter Chapters to count.
+       * @example
+       * // Count the number of Chapters
+       * const count = await prisma.chapter.count({
+       *   where: {
+       *     // ... the filter for the Chapters we want to count
+       *   }
+       * })
+       **/
+      count<T extends ChapterCountArgs>(
+         args?: Subset<T, ChapterCountArgs>,
+      ): Prisma.PrismaPromise<
+         T extends _Record<'select', any>
+            ? T['select'] extends true
+               ? number
+               : GetScalarType<T['select'], ChapterCountAggregateOutputType>
+            : number
+      >
+
+      /**
+       * Allows you to perform aggregations operations on a Chapter.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ChapterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+       * @example
+       * // Ordered by age ascending
+       * // Where email contains prisma.io
+       * // Limited to the 10 users
+       * const aggregations = await prisma.user.aggregate({
+       *   _avg: {
+       *     age: true,
+       *   },
+       *   where: {
+       *     email: {
+       *       contains: "prisma.io",
+       *     },
+       *   },
+       *   orderBy: {
+       *     age: "asc",
+       *   },
+       *   take: 10,
+       * })
+       **/
+      aggregate<T extends ChapterAggregateArgs>(
+         args: Subset<T, ChapterAggregateArgs>,
+      ): Prisma.PrismaPromise<GetChapterAggregateType<T>>
+
+      /**
+       * Group by Chapter.
+       * Note, that providing `undefined` is treated as the value not being there.
+       * Read more here: https://pris.ly/d/null-undefined
+       * @param {ChapterGroupByArgs} args - Group by arguments.
+       * @example
+       * // Group by city, order by createdAt, get count
+       * const result = await prisma.user.groupBy({
+       *   by: ['city', 'createdAt'],
+       *   orderBy: {
+       *     createdAt: true
+       *   },
+       *   _count: {
+       *     _all: true
+       *   },
+       * })
+       *
+       **/
+      groupBy<
+         T extends ChapterGroupByArgs,
+         HasSelectOrTake extends Or<
+            Extends<'skip', Keys<T>>,
+            Extends<'take', Keys<T>>
+         >,
+         OrderByArg extends True extends HasSelectOrTake
+            ? { orderBy: ChapterGroupByArgs['orderBy'] }
+            : { orderBy?: ChapterGroupByArgs['orderBy'] },
+         OrderFields extends ExcludeUnderscoreKeys<
+            Keys<MaybeTupleToUnion<T['orderBy']>>
+         >,
+         ByFields extends TupleToUnion<T['by']>,
+         ByValid extends Has<ByFields, OrderFields>,
+         HavingFields extends GetHavingFields<T['having']>,
+         HavingValid extends Has<ByFields, HavingFields>,
+         ByEmpty extends T['by'] extends never[] ? True : False,
+         InputErrors extends ByEmpty extends True
+            ? `Error: "by" must not be empty.`
+            : HavingValid extends False
+            ? {
+                 [P in HavingFields]: P extends ByFields
+                    ? never
+                    : P extends string
+                    ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                    : [
+                         Error,
+                         'Field ',
+                         P,
+                         ` in "having" needs to be provided in "by"`,
+                      ]
+              }[HavingFields]
+            : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+               ? ByValid extends True
+                  ? {}
+                  : {
+                       [P in OrderFields]: P extends ByFields
+                          ? never
+                          : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+               : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+               ? ByValid extends True
+                  ? {}
+                  : {
+                       [P in OrderFields]: P extends ByFields
+                          ? never
+                          : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+               : 'Error: If you provide "skip", you also need to provide "orderBy"'
+            : ByValid extends True
+            ? {}
+            : {
+                 [P in OrderFields]: P extends ByFields
+                    ? never
+                    : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+              }[OrderFields],
+      >(
+         args: SubsetIntersection<T, ChapterGroupByArgs, OrderByArg> &
+            InputErrors,
+      ): {} extends InputErrors
+         ? GetChapterGroupByPayload<T>
+         : Prisma.PrismaPromise<InputErrors>
+   }
+
+   /**
+    * The delegate class that acts as a "Promise-like" for Chapter.
+    * Why is this prefixed with `Prisma__`?
+    * Because we want to prevent naming conflicts as mentioned in
+    * https://github.com/prisma/prisma-client-js/issues/707
+    */
+   export class Prisma__ChapterClient<T, Null = never>
+      implements Prisma.PrismaPromise<T>
+   {
+      private readonly _dmmf
+      private readonly _queryType
+      private readonly _rootField
+      private readonly _clientMethod
+      private readonly _args
+      private readonly _dataPath
+      private readonly _errorFormat
+      private readonly _measurePerformance?
+      private _isList
+      private _callsite
+      private _requestPromise?;
+      readonly [Symbol.toStringTag]: 'PrismaPromise'
+      constructor(
+         _dmmf: runtime.DMMFClass,
+         _queryType: 'query' | 'mutation',
+         _rootField: string,
+         _clientMethod: string,
+         _args: any,
+         _dataPath: string[],
+         _errorFormat: ErrorFormat,
+         _measurePerformance?: boolean | undefined,
+         _isList?: boolean,
+      )
+
+      article<T extends ArticleArgs = {}>(
+         args?: Subset<T, ArticleArgs>,
+      ): Prisma__ArticleClient<ArticleGetPayload<T> | Null>
+
+      private get _document()
+      /**
+       * Attaches callbacks for the resolution and/or rejection of the Promise.
+       * @param onfulfilled The callback to execute when the Promise is resolved.
+       * @param onrejected The callback to execute when the Promise is rejected.
+       * @returns A Promise for the completion of which ever callback is executed.
+       */
+      then<TResult1 = T, TResult2 = never>(
+         onfulfilled?:
+            | ((value: T) => TResult1 | PromiseLike<TResult1>)
+            | undefined
+            | null,
+         onrejected?:
+            | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+            | undefined
+            | null,
+      ): Promise<TResult1 | TResult2>
+      /**
+       * Attaches a callback for only the rejection of the Promise.
+       * @param onrejected The callback to execute when the Promise is rejected.
+       * @returns A Promise for the completion of the callback.
+       */
+      catch<TResult = never>(
+         onrejected?:
+            | ((reason: any) => TResult | PromiseLike<TResult>)
+            | undefined
+            | null,
+      ): Promise<T | TResult>
+      /**
+       * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+       * resolved value cannot be modified from the callback.
+       * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+       * @returns A Promise for the completion of the callback.
+       */
+      finally(onfinally?: (() => void) | undefined | null): Promise<T>
+   }
+
+   // Custom InputTypes
+
+   /**
+    * Chapter base type for findUnique actions
+    */
+   export type ChapterFindUniqueArgsBase = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * Filter, which Chapter to fetch.
+       */
+      where: ChapterWhereUniqueInput
+   }
+
+   /**
+    * Chapter findUnique
+    */
+   export interface ChapterFindUniqueArgs extends ChapterFindUniqueArgsBase {
+      /**
+       * Throw an Error if query returns no results
+       * @deprecated since 4.0.0: use `findUniqueOrThrow` method instead
+       */
+      rejectOnNotFound?: RejectOnNotFound
+   }
+
+   /**
+    * Chapter findUniqueOrThrow
+    */
+   export type ChapterFindUniqueOrThrowArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * Filter, which Chapter to fetch.
+       */
+      where: ChapterWhereUniqueInput
+   }
+
+   /**
+    * Chapter base type for findFirst actions
+    */
+   export type ChapterFindFirstArgsBase = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * Filter, which Chapter to fetch.
+       */
+      where?: ChapterWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Chapters to fetch.
+       */
+      orderBy?: Enumerable<ChapterOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the position for searching for Chapters.
+       */
+      cursor?: ChapterWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Chapters from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Chapters.
+       */
+      skip?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+       *
+       * Filter by unique combinations of Chapters.
+       */
+      distinct?: Enumerable<ChapterScalarFieldEnum>
+   }
+
+   /**
+    * Chapter findFirst
+    */
+   export interface ChapterFindFirstArgs extends ChapterFindFirstArgsBase {
+      /**
+       * Throw an Error if query returns no results
+       * @deprecated since 4.0.0: use `findFirstOrThrow` method instead
+       */
+      rejectOnNotFound?: RejectOnNotFound
+   }
+
+   /**
+    * Chapter findFirstOrThrow
+    */
+   export type ChapterFindFirstOrThrowArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * Filter, which Chapter to fetch.
+       */
+      where?: ChapterWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Chapters to fetch.
+       */
+      orderBy?: Enumerable<ChapterOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the position for searching for Chapters.
+       */
+      cursor?: ChapterWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Chapters from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Chapters.
+       */
+      skip?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+       *
+       * Filter by unique combinations of Chapters.
+       */
+      distinct?: Enumerable<ChapterScalarFieldEnum>
+   }
+
+   /**
+    * Chapter findMany
+    */
+   export type ChapterFindManyArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * Filter, which Chapters to fetch.
+       */
+      where?: ChapterWhereInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of Chapters to fetch.
+       */
+      orderBy?: Enumerable<ChapterOrderByWithRelationInput>
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the position for listing Chapters.
+       */
+      cursor?: ChapterWhereUniqueInput
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` Chapters from the position of the cursor.
+       */
+      take?: number
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` Chapters.
+       */
+      skip?: number
+      distinct?: Enumerable<ChapterScalarFieldEnum>
+   }
+
+   /**
+    * Chapter create
+    */
+   export type ChapterCreateArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * The data needed to create a Chapter.
+       */
+      data: XOR<ChapterCreateInput, ChapterUncheckedCreateInput>
+   }
+
+   /**
+    * Chapter createMany
+    */
+   export type ChapterCreateManyArgs = {
+      /**
+       * The data used to create many Chapters.
+       */
+      data: Enumerable<ChapterCreateManyInput>
+      skipDuplicates?: boolean
+   }
+
+   /**
+    * Chapter update
+    */
+   export type ChapterUpdateArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * The data needed to update a Chapter.
+       */
+      data: XOR<ChapterUpdateInput, ChapterUncheckedUpdateInput>
+      /**
+       * Choose, which Chapter to update.
+       */
+      where: ChapterWhereUniqueInput
+   }
+
+   /**
+    * Chapter updateMany
+    */
+   export type ChapterUpdateManyArgs = {
+      /**
+       * The data used to update Chapters.
+       */
+      data: XOR<ChapterUpdateManyMutationInput, ChapterUncheckedUpdateManyInput>
+      /**
+       * Filter which Chapters to update
+       */
+      where?: ChapterWhereInput
+   }
+
+   /**
+    * Chapter upsert
+    */
+   export type ChapterUpsertArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * The filter to search for the Chapter to update in case it exists.
+       */
+      where: ChapterWhereUniqueInput
+      /**
+       * In case the Chapter found by the `where` argument doesn't exist, create a new Chapter with this data.
+       */
+      create: XOR<ChapterCreateInput, ChapterUncheckedCreateInput>
+      /**
+       * In case the Chapter was found with the provided `where` argument, update it with this data.
+       */
+      update: XOR<ChapterUpdateInput, ChapterUncheckedUpdateInput>
+   }
+
+   /**
+    * Chapter delete
+    */
+   export type ChapterDeleteArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
+      /**
+       * Filter which Chapter to delete.
+       */
+      where: ChapterWhereUniqueInput
+   }
+
+   /**
+    * Chapter deleteMany
+    */
+   export type ChapterDeleteManyArgs = {
+      /**
+       * Filter which Chapters to delete
+       */
+      where?: ChapterWhereInput
+   }
+
+   /**
+    * Chapter without action
+    */
+   export type ChapterArgs = {
+      /**
+       * Select specific fields to fetch from the Chapter
+       */
+      select?: ChapterSelect | null
+      /**
+       * Choose, which related nodes to fetch as well.
+       */
+      include?: ChapterInclude | null
    }
 
    /**
     * Enums
     */
 
-   export const JsonNullValueFilter: {
-      DbNull: typeof DbNull
-      JsonNull: typeof JsonNull
-      AnyNull: typeof AnyNull
-   }
-
-   export type JsonNullValueFilter =
-      (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-   export const NullableJsonNullValueInput: {
-      DbNull: typeof DbNull
-      JsonNull: typeof JsonNull
-   }
-
-   export type NullableJsonNullValueInput =
-      (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-   export const ProjectScalarFieldEnum: {
+   export const ArticleScalarFieldEnum: {
       id: 'id'
       name: 'name'
-      pageHtml: 'pageHtml'
-      nodeData: 'nodeData'
-      settings: 'settings'
       createdAt: 'createdAt'
       updatedAt: 'updatedAt'
       userId: 'userId'
    }
 
-   export type ProjectScalarFieldEnum =
-      (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+   export type ArticleScalarFieldEnum =
+      (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
+
+   export const ChapterScalarFieldEnum: {
+      id: 'id'
+      name: 'name'
+      createdAt: 'createdAt'
+      updatedAt: 'updatedAt'
+      articleId: 'articleId'
+   }
+
+   export type ChapterScalarFieldEnum =
+      (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
 
    export const SortOrder: {
       asc: 'asc'
@@ -3105,17 +5200,26 @@ export namespace Prisma {
 
    export const UserScalarFieldEnum: {
       id: 'id'
-      email: 'email'
       username: 'username'
       password: 'password'
-      emailToken: 'emailToken'
-      confirmed: 'confirmed'
+      phoneNumber: 'phoneNumber'
       createdAt: 'createdAt'
       updatedAt: 'updatedAt'
    }
 
    export type UserScalarFieldEnum =
       (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+   export const VerificationCodeScalarFieldEnum: {
+      id: 'id'
+      phoneNumber: 'phoneNumber'
+      code: 'code'
+      createdAt: 'createdAt'
+      updatedAt: 'updatedAt'
+   }
+
+   export type VerificationCodeScalarFieldEnum =
+      (typeof VerificationCodeScalarFieldEnum)[keyof typeof VerificationCodeScalarFieldEnum]
 
    /**
     * Deep Input Types
@@ -3126,42 +5230,35 @@ export namespace Prisma {
       OR?: Enumerable<UserWhereInput>
       NOT?: Enumerable<UserWhereInput>
       id?: IntFilter | number
-      email?: StringFilter | string
       username?: StringNullableFilter | string | null
       password?: StringFilter | string
-      emailToken?: StringFilter | string
-      confirmed?: BoolFilter | boolean
+      phoneNumber?: StringFilter | string
       createdAt?: DateTimeFilter | Date | string
       updatedAt?: DateTimeFilter | Date | string
-      project?: ProjectListRelationFilter
+      article?: ArticleListRelationFilter
    }
 
    export type UserOrderByWithRelationInput = {
       id?: SortOrder
-      email?: SortOrder
       username?: SortOrder
       password?: SortOrder
-      emailToken?: SortOrder
-      confirmed?: SortOrder
+      phoneNumber?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
-      project?: ProjectOrderByRelationAggregateInput
+      article?: ArticleOrderByRelationAggregateInput
    }
 
    export type UserWhereUniqueInput = {
       id?: number
-      email?: string
       username?: string
-      emailToken?: string
+      phoneNumber?: string
    }
 
    export type UserOrderByWithAggregationInput = {
       id?: SortOrder
-      email?: SortOrder
       username?: SortOrder
       password?: SortOrder
-      emailToken?: SortOrder
-      confirmed?: SortOrder
+      phoneNumber?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
       _count?: UserCountOrderByAggregateInput
@@ -3176,226 +5273,386 @@ export namespace Prisma {
       OR?: Enumerable<UserScalarWhereWithAggregatesInput>
       NOT?: Enumerable<UserScalarWhereWithAggregatesInput>
       id?: IntWithAggregatesFilter | number
-      email?: StringWithAggregatesFilter | string
       username?: StringNullableWithAggregatesFilter | string | null
       password?: StringWithAggregatesFilter | string
-      emailToken?: StringWithAggregatesFilter | string
-      confirmed?: BoolWithAggregatesFilter | boolean
+      phoneNumber?: StringWithAggregatesFilter | string
       createdAt?: DateTimeWithAggregatesFilter | Date | string
       updatedAt?: DateTimeWithAggregatesFilter | Date | string
    }
 
-   export type ProjectWhereInput = {
-      AND?: Enumerable<ProjectWhereInput>
-      OR?: Enumerable<ProjectWhereInput>
-      NOT?: Enumerable<ProjectWhereInput>
+   export type VerificationCodeWhereInput = {
+      AND?: Enumerable<VerificationCodeWhereInput>
+      OR?: Enumerable<VerificationCodeWhereInput>
+      NOT?: Enumerable<VerificationCodeWhereInput>
+      id?: IntFilter | number
+      phoneNumber?: StringFilter | string
+      code?: StringFilter | string
+      createdAt?: DateTimeFilter | Date | string
+      updatedAt?: DateTimeFilter | Date | string
+   }
+
+   export type VerificationCodeOrderByWithRelationInput = {
+      id?: SortOrder
+      phoneNumber?: SortOrder
+      code?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+   }
+
+   export type VerificationCodeWhereUniqueInput = {
+      id?: number
+      phoneNumber?: string
+   }
+
+   export type VerificationCodeOrderByWithAggregationInput = {
+      id?: SortOrder
+      phoneNumber?: SortOrder
+      code?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+      _count?: VerificationCodeCountOrderByAggregateInput
+      _avg?: VerificationCodeAvgOrderByAggregateInput
+      _max?: VerificationCodeMaxOrderByAggregateInput
+      _min?: VerificationCodeMinOrderByAggregateInput
+      _sum?: VerificationCodeSumOrderByAggregateInput
+   }
+
+   export type VerificationCodeScalarWhereWithAggregatesInput = {
+      AND?: Enumerable<VerificationCodeScalarWhereWithAggregatesInput>
+      OR?: Enumerable<VerificationCodeScalarWhereWithAggregatesInput>
+      NOT?: Enumerable<VerificationCodeScalarWhereWithAggregatesInput>
+      id?: IntWithAggregatesFilter | number
+      phoneNumber?: StringWithAggregatesFilter | string
+      code?: StringWithAggregatesFilter | string
+      createdAt?: DateTimeWithAggregatesFilter | Date | string
+      updatedAt?: DateTimeWithAggregatesFilter | Date | string
+   }
+
+   export type ArticleWhereInput = {
+      AND?: Enumerable<ArticleWhereInput>
+      OR?: Enumerable<ArticleWhereInput>
+      NOT?: Enumerable<ArticleWhereInput>
       id?: IntFilter | number
       name?: StringFilter | string
-      pageHtml?: StringNullableFilter | string | null
-      nodeData?: JsonNullableFilter
-      settings?: JsonNullableFilter
       createdAt?: DateTimeFilter | Date | string
       updatedAt?: DateTimeFilter | Date | string
       userId?: IntFilter | number
       user?: XOR<UserRelationFilter, UserWhereInput>
+      chapter?: ChapterListRelationFilter
    }
 
-   export type ProjectOrderByWithRelationInput = {
+   export type ArticleOrderByWithRelationInput = {
       id?: SortOrder
       name?: SortOrder
-      pageHtml?: SortOrder
-      nodeData?: SortOrder
-      settings?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
       userId?: SortOrder
       user?: UserOrderByWithRelationInput
+      chapter?: ChapterOrderByRelationAggregateInput
    }
 
-   export type ProjectWhereUniqueInput = {
+   export type ArticleWhereUniqueInput = {
       id?: number
       name?: string
    }
 
-   export type ProjectOrderByWithAggregationInput = {
+   export type ArticleOrderByWithAggregationInput = {
       id?: SortOrder
       name?: SortOrder
-      pageHtml?: SortOrder
-      nodeData?: SortOrder
-      settings?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
       userId?: SortOrder
-      _count?: ProjectCountOrderByAggregateInput
-      _avg?: ProjectAvgOrderByAggregateInput
-      _max?: ProjectMaxOrderByAggregateInput
-      _min?: ProjectMinOrderByAggregateInput
-      _sum?: ProjectSumOrderByAggregateInput
+      _count?: ArticleCountOrderByAggregateInput
+      _avg?: ArticleAvgOrderByAggregateInput
+      _max?: ArticleMaxOrderByAggregateInput
+      _min?: ArticleMinOrderByAggregateInput
+      _sum?: ArticleSumOrderByAggregateInput
    }
 
-   export type ProjectScalarWhereWithAggregatesInput = {
-      AND?: Enumerable<ProjectScalarWhereWithAggregatesInput>
-      OR?: Enumerable<ProjectScalarWhereWithAggregatesInput>
-      NOT?: Enumerable<ProjectScalarWhereWithAggregatesInput>
+   export type ArticleScalarWhereWithAggregatesInput = {
+      AND?: Enumerable<ArticleScalarWhereWithAggregatesInput>
+      OR?: Enumerable<ArticleScalarWhereWithAggregatesInput>
+      NOT?: Enumerable<ArticleScalarWhereWithAggregatesInput>
       id?: IntWithAggregatesFilter | number
       name?: StringWithAggregatesFilter | string
-      pageHtml?: StringNullableWithAggregatesFilter | string | null
-      nodeData?: JsonNullableWithAggregatesFilter
-      settings?: JsonNullableWithAggregatesFilter
       createdAt?: DateTimeWithAggregatesFilter | Date | string
       updatedAt?: DateTimeWithAggregatesFilter | Date | string
       userId?: IntWithAggregatesFilter | number
    }
 
+   export type ChapterWhereInput = {
+      AND?: Enumerable<ChapterWhereInput>
+      OR?: Enumerable<ChapterWhereInput>
+      NOT?: Enumerable<ChapterWhereInput>
+      id?: IntFilter | number
+      name?: StringFilter | string
+      createdAt?: DateTimeFilter | Date | string
+      updatedAt?: DateTimeFilter | Date | string
+      articleId?: IntFilter | number
+      article?: XOR<ArticleRelationFilter, ArticleWhereInput>
+   }
+
+   export type ChapterOrderByWithRelationInput = {
+      id?: SortOrder
+      name?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+      articleId?: SortOrder
+      article?: ArticleOrderByWithRelationInput
+   }
+
+   export type ChapterWhereUniqueInput = {
+      id?: number
+      name?: string
+   }
+
+   export type ChapterOrderByWithAggregationInput = {
+      id?: SortOrder
+      name?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+      articleId?: SortOrder
+      _count?: ChapterCountOrderByAggregateInput
+      _avg?: ChapterAvgOrderByAggregateInput
+      _max?: ChapterMaxOrderByAggregateInput
+      _min?: ChapterMinOrderByAggregateInput
+      _sum?: ChapterSumOrderByAggregateInput
+   }
+
+   export type ChapterScalarWhereWithAggregatesInput = {
+      AND?: Enumerable<ChapterScalarWhereWithAggregatesInput>
+      OR?: Enumerable<ChapterScalarWhereWithAggregatesInput>
+      NOT?: Enumerable<ChapterScalarWhereWithAggregatesInput>
+      id?: IntWithAggregatesFilter | number
+      name?: StringWithAggregatesFilter | string
+      createdAt?: DateTimeWithAggregatesFilter | Date | string
+      updatedAt?: DateTimeWithAggregatesFilter | Date | string
+      articleId?: IntWithAggregatesFilter | number
+   }
+
    export type UserCreateInput = {
-      email: string
       username?: string | null
       password: string
-      emailToken: string
-      confirmed?: boolean
+      phoneNumber: string
       createdAt?: Date | string
       updatedAt?: Date | string
-      project?: ProjectCreateNestedManyWithoutUserInput
+      article?: ArticleCreateNestedManyWithoutUserInput
    }
 
    export type UserUncheckedCreateInput = {
       id?: number
-      email: string
       username?: string | null
       password: string
-      emailToken: string
-      confirmed?: boolean
+      phoneNumber: string
       createdAt?: Date | string
       updatedAt?: Date | string
-      project?: ProjectUncheckedCreateNestedManyWithoutUserInput
+      article?: ArticleUncheckedCreateNestedManyWithoutUserInput
    }
 
    export type UserUpdateInput = {
-      email?: StringFieldUpdateOperationsInput | string
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
-      emailToken?: StringFieldUpdateOperationsInput | string
-      confirmed?: BoolFieldUpdateOperationsInput | boolean
+      phoneNumber?: StringFieldUpdateOperationsInput | string
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-      project?: ProjectUpdateManyWithoutUserNestedInput
+      article?: ArticleUpdateManyWithoutUserNestedInput
    }
 
    export type UserUncheckedUpdateInput = {
       id?: IntFieldUpdateOperationsInput | number
-      email?: StringFieldUpdateOperationsInput | string
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
-      emailToken?: StringFieldUpdateOperationsInput | string
-      confirmed?: BoolFieldUpdateOperationsInput | boolean
+      phoneNumber?: StringFieldUpdateOperationsInput | string
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-      project?: ProjectUncheckedUpdateManyWithoutUserNestedInput
+      article?: ArticleUncheckedUpdateManyWithoutUserNestedInput
    }
 
    export type UserCreateManyInput = {
       id?: number
-      email: string
       username?: string | null
       password: string
-      emailToken: string
-      confirmed?: boolean
+      phoneNumber: string
       createdAt?: Date | string
       updatedAt?: Date | string
    }
 
    export type UserUpdateManyMutationInput = {
-      email?: StringFieldUpdateOperationsInput | string
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
-      emailToken?: StringFieldUpdateOperationsInput | string
-      confirmed?: BoolFieldUpdateOperationsInput | boolean
+      phoneNumber?: StringFieldUpdateOperationsInput | string
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
    }
 
    export type UserUncheckedUpdateManyInput = {
       id?: IntFieldUpdateOperationsInput | number
-      email?: StringFieldUpdateOperationsInput | string
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
-      emailToken?: StringFieldUpdateOperationsInput | string
-      confirmed?: BoolFieldUpdateOperationsInput | boolean
+      phoneNumber?: StringFieldUpdateOperationsInput | string
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
    }
 
-   export type ProjectCreateInput = {
-      name: string
-      pageHtml?: string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
+   export type VerificationCodeCreateInput = {
+      phoneNumber: string
+      code: string
       createdAt?: Date | string
       updatedAt?: Date | string
-      user: UserCreateNestedOneWithoutProjectInput
    }
 
-   export type ProjectUncheckedCreateInput = {
+   export type VerificationCodeUncheckedCreateInput = {
+      id?: number
+      phoneNumber: string
+      code: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+   }
+
+   export type VerificationCodeUpdateInput = {
+      phoneNumber?: StringFieldUpdateOperationsInput | string
+      code?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type VerificationCodeUncheckedUpdateInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      phoneNumber?: StringFieldUpdateOperationsInput | string
+      code?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type VerificationCodeCreateManyInput = {
+      id?: number
+      phoneNumber: string
+      code: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+   }
+
+   export type VerificationCodeUpdateManyMutationInput = {
+      phoneNumber?: StringFieldUpdateOperationsInput | string
+      code?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type VerificationCodeUncheckedUpdateManyInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      phoneNumber?: StringFieldUpdateOperationsInput | string
+      code?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type ArticleCreateInput = {
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+      user: UserCreateNestedOneWithoutArticleInput
+      chapter?: ChapterCreateNestedManyWithoutArticleInput
+   }
+
+   export type ArticleUncheckedCreateInput = {
       id?: number
       name: string
-      pageHtml?: string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
+      createdAt?: Date | string
+      updatedAt?: Date | string
+      userId: number
+      chapter?: ChapterUncheckedCreateNestedManyWithoutArticleInput
+   }
+
+   export type ArticleUpdateInput = {
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      user?: UserUpdateOneRequiredWithoutArticleNestedInput
+      chapter?: ChapterUpdateManyWithoutArticleNestedInput
+   }
+
+   export type ArticleUncheckedUpdateInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      userId?: IntFieldUpdateOperationsInput | number
+      chapter?: ChapterUncheckedUpdateManyWithoutArticleNestedInput
+   }
+
+   export type ArticleCreateManyInput = {
+      id?: number
+      name: string
       createdAt?: Date | string
       updatedAt?: Date | string
       userId: number
    }
 
-   export type ProjectUpdateInput = {
+   export type ArticleUpdateManyMutationInput = {
       name?: StringFieldUpdateOperationsInput | string
-      pageHtml?: NullableStringFieldUpdateOperationsInput | string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-      user?: UserUpdateOneRequiredWithoutProjectNestedInput
    }
 
-   export type ProjectUncheckedUpdateInput = {
+   export type ArticleUncheckedUpdateManyInput = {
       id?: IntFieldUpdateOperationsInput | number
       name?: StringFieldUpdateOperationsInput | string
-      pageHtml?: NullableStringFieldUpdateOperationsInput | string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
       userId?: IntFieldUpdateOperationsInput | number
    }
 
-   export type ProjectCreateManyInput = {
-      id?: number
+   export type ChapterCreateInput = {
       name: string
-      pageHtml?: string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: Date | string
       updatedAt?: Date | string
-      userId: number
+      article: ArticleCreateNestedOneWithoutChapterInput
    }
 
-   export type ProjectUpdateManyMutationInput = {
+   export type ChapterUncheckedCreateInput = {
+      id?: number
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+      articleId: number
+   }
+
+   export type ChapterUpdateInput = {
       name?: StringFieldUpdateOperationsInput | string
-      pageHtml?: NullableStringFieldUpdateOperationsInput | string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      article?: ArticleUpdateOneRequiredWithoutChapterNestedInput
    }
 
-   export type ProjectUncheckedUpdateManyInput = {
+   export type ChapterUncheckedUpdateInput = {
       id?: IntFieldUpdateOperationsInput | number
       name?: StringFieldUpdateOperationsInput | string
-      pageHtml?: NullableStringFieldUpdateOperationsInput | string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-      userId?: IntFieldUpdateOperationsInput | number
+      articleId?: IntFieldUpdateOperationsInput | number
+   }
+
+   export type ChapterCreateManyInput = {
+      id?: number
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+      articleId: number
+   }
+
+   export type ChapterUpdateManyMutationInput = {
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type ChapterUncheckedUpdateManyInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      articleId?: IntFieldUpdateOperationsInput | number
    }
 
    export type IntFilter = {
@@ -3407,20 +5664,6 @@ export namespace Prisma {
       gt?: number
       gte?: number
       not?: NestedIntFilter | number
-   }
-
-   export type StringFilter = {
-      equals?: string
-      in?: Enumerable<string> | string
-      notIn?: Enumerable<string> | string
-      lt?: string
-      lte?: string
-      gt?: string
-      gte?: string
-      contains?: string
-      startsWith?: string
-      endsWith?: string
-      not?: NestedStringFilter | string
    }
 
    export type StringNullableFilter = {
@@ -3437,9 +5680,18 @@ export namespace Prisma {
       not?: NestedStringNullableFilter | string | null
    }
 
-   export type BoolFilter = {
-      equals?: boolean
-      not?: NestedBoolFilter | boolean
+   export type StringFilter = {
+      equals?: string
+      in?: Enumerable<string> | string
+      notIn?: Enumerable<string> | string
+      lt?: string
+      lte?: string
+      gt?: string
+      gte?: string
+      contains?: string
+      startsWith?: string
+      endsWith?: string
+      not?: NestedStringFilter | string
    }
 
    export type DateTimeFilter = {
@@ -3453,23 +5705,21 @@ export namespace Prisma {
       not?: NestedDateTimeFilter | Date | string
    }
 
-   export type ProjectListRelationFilter = {
-      every?: ProjectWhereInput
-      some?: ProjectWhereInput
-      none?: ProjectWhereInput
+   export type ArticleListRelationFilter = {
+      every?: ArticleWhereInput
+      some?: ArticleWhereInput
+      none?: ArticleWhereInput
    }
 
-   export type ProjectOrderByRelationAggregateInput = {
+   export type ArticleOrderByRelationAggregateInput = {
       _count?: SortOrder
    }
 
    export type UserCountOrderByAggregateInput = {
       id?: SortOrder
-      email?: SortOrder
       username?: SortOrder
       password?: SortOrder
-      emailToken?: SortOrder
-      confirmed?: SortOrder
+      phoneNumber?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
    }
@@ -3480,22 +5730,18 @@ export namespace Prisma {
 
    export type UserMaxOrderByAggregateInput = {
       id?: SortOrder
-      email?: SortOrder
       username?: SortOrder
       password?: SortOrder
-      emailToken?: SortOrder
-      confirmed?: SortOrder
+      phoneNumber?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
    }
 
    export type UserMinOrderByAggregateInput = {
       id?: SortOrder
-      email?: SortOrder
       username?: SortOrder
       password?: SortOrder
-      emailToken?: SortOrder
-      confirmed?: SortOrder
+      phoneNumber?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
    }
@@ -3520,23 +5766,6 @@ export namespace Prisma {
       _max?: NestedIntFilter
    }
 
-   export type StringWithAggregatesFilter = {
-      equals?: string
-      in?: Enumerable<string> | string
-      notIn?: Enumerable<string> | string
-      lt?: string
-      lte?: string
-      gt?: string
-      gte?: string
-      contains?: string
-      startsWith?: string
-      endsWith?: string
-      not?: NestedStringWithAggregatesFilter | string
-      _count?: NestedIntFilter
-      _min?: NestedStringFilter
-      _max?: NestedStringFilter
-   }
-
    export type StringNullableWithAggregatesFilter = {
       equals?: string | null
       in?: Enumerable<string> | string | null
@@ -3554,12 +5783,21 @@ export namespace Prisma {
       _max?: NestedStringNullableFilter
    }
 
-   export type BoolWithAggregatesFilter = {
-      equals?: boolean
-      not?: NestedBoolWithAggregatesFilter | boolean
+   export type StringWithAggregatesFilter = {
+      equals?: string
+      in?: Enumerable<string> | string
+      notIn?: Enumerable<string> | string
+      lt?: string
+      lte?: string
+      gt?: string
+      gte?: string
+      contains?: string
+      startsWith?: string
+      endsWith?: string
+      not?: NestedStringWithAggregatesFilter | string
       _count?: NestedIntFilter
-      _min?: NestedBoolFilter
-      _max?: NestedBoolFilter
+      _min?: NestedStringFilter
+      _max?: NestedStringFilter
    }
 
    export type DateTimeWithAggregatesFilter = {
@@ -3575,30 +5813,37 @@ export namespace Prisma {
       _min?: NestedDateTimeFilter
       _max?: NestedDateTimeFilter
    }
-   export type JsonNullableFilter =
-      | PatchUndefined<
-           Either<
-              Required<JsonNullableFilterBase>,
-              Exclude<keyof Required<JsonNullableFilterBase>, 'path'>
-           >,
-           Required<JsonNullableFilterBase>
-        >
-      | OptionalFlat<Omit<Required<JsonNullableFilterBase>, 'path'>>
 
-   export type JsonNullableFilterBase = {
-      equals?: InputJsonValue | JsonNullValueFilter
-      path?: string
-      string_contains?: string
-      string_starts_with?: string
-      string_ends_with?: string
-      array_contains?: InputJsonValue | null
-      array_starts_with?: InputJsonValue | null
-      array_ends_with?: InputJsonValue | null
-      lt?: InputJsonValue
-      lte?: InputJsonValue
-      gt?: InputJsonValue
-      gte?: InputJsonValue
-      not?: InputJsonValue | JsonNullValueFilter
+   export type VerificationCodeCountOrderByAggregateInput = {
+      id?: SortOrder
+      phoneNumber?: SortOrder
+      code?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+   }
+
+   export type VerificationCodeAvgOrderByAggregateInput = {
+      id?: SortOrder
+   }
+
+   export type VerificationCodeMaxOrderByAggregateInput = {
+      id?: SortOrder
+      phoneNumber?: SortOrder
+      code?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+   }
+
+   export type VerificationCodeMinOrderByAggregateInput = {
+      id?: SortOrder
+      phoneNumber?: SortOrder
+      code?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+   }
+
+   export type VerificationCodeSumOrderByAggregateInput = {
+      id?: SortOrder
    }
 
    export type UserRelationFilter = {
@@ -3606,129 +5851,136 @@ export namespace Prisma {
       isNot?: UserWhereInput
    }
 
-   export type ProjectCountOrderByAggregateInput = {
+   export type ChapterListRelationFilter = {
+      every?: ChapterWhereInput
+      some?: ChapterWhereInput
+      none?: ChapterWhereInput
+   }
+
+   export type ChapterOrderByRelationAggregateInput = {
+      _count?: SortOrder
+   }
+
+   export type ArticleCountOrderByAggregateInput = {
       id?: SortOrder
       name?: SortOrder
-      pageHtml?: SortOrder
-      nodeData?: SortOrder
-      settings?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
       userId?: SortOrder
    }
 
-   export type ProjectAvgOrderByAggregateInput = {
+   export type ArticleAvgOrderByAggregateInput = {
       id?: SortOrder
       userId?: SortOrder
    }
 
-   export type ProjectMaxOrderByAggregateInput = {
+   export type ArticleMaxOrderByAggregateInput = {
       id?: SortOrder
       name?: SortOrder
-      pageHtml?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
       userId?: SortOrder
    }
 
-   export type ProjectMinOrderByAggregateInput = {
+   export type ArticleMinOrderByAggregateInput = {
       id?: SortOrder
       name?: SortOrder
-      pageHtml?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
       userId?: SortOrder
    }
 
-   export type ProjectSumOrderByAggregateInput = {
+   export type ArticleSumOrderByAggregateInput = {
       id?: SortOrder
       userId?: SortOrder
    }
-   export type JsonNullableWithAggregatesFilter =
-      | PatchUndefined<
-           Either<
-              Required<JsonNullableWithAggregatesFilterBase>,
-              Exclude<
-                 keyof Required<JsonNullableWithAggregatesFilterBase>,
-                 'path'
-              >
-           >,
-           Required<JsonNullableWithAggregatesFilterBase>
-        >
-      | OptionalFlat<
-           Omit<Required<JsonNullableWithAggregatesFilterBase>, 'path'>
-        >
 
-   export type JsonNullableWithAggregatesFilterBase = {
-      equals?: InputJsonValue | JsonNullValueFilter
-      path?: string
-      string_contains?: string
-      string_starts_with?: string
-      string_ends_with?: string
-      array_contains?: InputJsonValue | null
-      array_starts_with?: InputJsonValue | null
-      array_ends_with?: InputJsonValue | null
-      lt?: InputJsonValue
-      lte?: InputJsonValue
-      gt?: InputJsonValue
-      gte?: InputJsonValue
-      not?: InputJsonValue | JsonNullValueFilter
-      _count?: NestedIntNullableFilter
-      _min?: NestedJsonNullableFilter
-      _max?: NestedJsonNullableFilter
+   export type ArticleRelationFilter = {
+      is?: ArticleWhereInput
+      isNot?: ArticleWhereInput
    }
 
-   export type ProjectCreateNestedManyWithoutUserInput = {
+   export type ChapterCountOrderByAggregateInput = {
+      id?: SortOrder
+      name?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+      articleId?: SortOrder
+   }
+
+   export type ChapterAvgOrderByAggregateInput = {
+      id?: SortOrder
+      articleId?: SortOrder
+   }
+
+   export type ChapterMaxOrderByAggregateInput = {
+      id?: SortOrder
+      name?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+      articleId?: SortOrder
+   }
+
+   export type ChapterMinOrderByAggregateInput = {
+      id?: SortOrder
+      name?: SortOrder
+      createdAt?: SortOrder
+      updatedAt?: SortOrder
+      articleId?: SortOrder
+   }
+
+   export type ChapterSumOrderByAggregateInput = {
+      id?: SortOrder
+      articleId?: SortOrder
+   }
+
+   export type ArticleCreateNestedManyWithoutUserInput = {
       create?: XOR<
-         Enumerable<ProjectCreateWithoutUserInput>,
-         Enumerable<ProjectUncheckedCreateWithoutUserInput>
+         Enumerable<ArticleCreateWithoutUserInput>,
+         Enumerable<ArticleUncheckedCreateWithoutUserInput>
       >
-      connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutUserInput>
-      createMany?: ProjectCreateManyUserInputEnvelope
-      connect?: Enumerable<ProjectWhereUniqueInput>
+      connectOrCreate?: Enumerable<ArticleCreateOrConnectWithoutUserInput>
+      createMany?: ArticleCreateManyUserInputEnvelope
+      connect?: Enumerable<ArticleWhereUniqueInput>
    }
 
-   export type ProjectUncheckedCreateNestedManyWithoutUserInput = {
+   export type ArticleUncheckedCreateNestedManyWithoutUserInput = {
       create?: XOR<
-         Enumerable<ProjectCreateWithoutUserInput>,
-         Enumerable<ProjectUncheckedCreateWithoutUserInput>
+         Enumerable<ArticleCreateWithoutUserInput>,
+         Enumerable<ArticleUncheckedCreateWithoutUserInput>
       >
-      connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutUserInput>
-      createMany?: ProjectCreateManyUserInputEnvelope
-      connect?: Enumerable<ProjectWhereUniqueInput>
-   }
-
-   export type StringFieldUpdateOperationsInput = {
-      set?: string
+      connectOrCreate?: Enumerable<ArticleCreateOrConnectWithoutUserInput>
+      createMany?: ArticleCreateManyUserInputEnvelope
+      connect?: Enumerable<ArticleWhereUniqueInput>
    }
 
    export type NullableStringFieldUpdateOperationsInput = {
       set?: string | null
    }
 
-   export type BoolFieldUpdateOperationsInput = {
-      set?: boolean
+   export type StringFieldUpdateOperationsInput = {
+      set?: string
    }
 
    export type DateTimeFieldUpdateOperationsInput = {
       set?: Date | string
    }
 
-   export type ProjectUpdateManyWithoutUserNestedInput = {
+   export type ArticleUpdateManyWithoutUserNestedInput = {
       create?: XOR<
-         Enumerable<ProjectCreateWithoutUserInput>,
-         Enumerable<ProjectUncheckedCreateWithoutUserInput>
+         Enumerable<ArticleCreateWithoutUserInput>,
+         Enumerable<ArticleUncheckedCreateWithoutUserInput>
       >
-      connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutUserInput>
-      upsert?: Enumerable<ProjectUpsertWithWhereUniqueWithoutUserInput>
-      createMany?: ProjectCreateManyUserInputEnvelope
-      set?: Enumerable<ProjectWhereUniqueInput>
-      disconnect?: Enumerable<ProjectWhereUniqueInput>
-      delete?: Enumerable<ProjectWhereUniqueInput>
-      connect?: Enumerable<ProjectWhereUniqueInput>
-      update?: Enumerable<ProjectUpdateWithWhereUniqueWithoutUserInput>
-      updateMany?: Enumerable<ProjectUpdateManyWithWhereWithoutUserInput>
-      deleteMany?: Enumerable<ProjectScalarWhereInput>
+      connectOrCreate?: Enumerable<ArticleCreateOrConnectWithoutUserInput>
+      upsert?: Enumerable<ArticleUpsertWithWhereUniqueWithoutUserInput>
+      createMany?: ArticleCreateManyUserInputEnvelope
+      set?: Enumerable<ArticleWhereUniqueInput>
+      disconnect?: Enumerable<ArticleWhereUniqueInput>
+      delete?: Enumerable<ArticleWhereUniqueInput>
+      connect?: Enumerable<ArticleWhereUniqueInput>
+      update?: Enumerable<ArticleUpdateWithWhereUniqueWithoutUserInput>
+      updateMany?: Enumerable<ArticleUpdateManyWithWhereWithoutUserInput>
+      deleteMany?: Enumerable<ArticleScalarWhereInput>
    }
 
    export type IntFieldUpdateOperationsInput = {
@@ -3739,43 +5991,120 @@ export namespace Prisma {
       divide?: number
    }
 
-   export type ProjectUncheckedUpdateManyWithoutUserNestedInput = {
+   export type ArticleUncheckedUpdateManyWithoutUserNestedInput = {
       create?: XOR<
-         Enumerable<ProjectCreateWithoutUserInput>,
-         Enumerable<ProjectUncheckedCreateWithoutUserInput>
+         Enumerable<ArticleCreateWithoutUserInput>,
+         Enumerable<ArticleUncheckedCreateWithoutUserInput>
       >
-      connectOrCreate?: Enumerable<ProjectCreateOrConnectWithoutUserInput>
-      upsert?: Enumerable<ProjectUpsertWithWhereUniqueWithoutUserInput>
-      createMany?: ProjectCreateManyUserInputEnvelope
-      set?: Enumerable<ProjectWhereUniqueInput>
-      disconnect?: Enumerable<ProjectWhereUniqueInput>
-      delete?: Enumerable<ProjectWhereUniqueInput>
-      connect?: Enumerable<ProjectWhereUniqueInput>
-      update?: Enumerable<ProjectUpdateWithWhereUniqueWithoutUserInput>
-      updateMany?: Enumerable<ProjectUpdateManyWithWhereWithoutUserInput>
-      deleteMany?: Enumerable<ProjectScalarWhereInput>
+      connectOrCreate?: Enumerable<ArticleCreateOrConnectWithoutUserInput>
+      upsert?: Enumerable<ArticleUpsertWithWhereUniqueWithoutUserInput>
+      createMany?: ArticleCreateManyUserInputEnvelope
+      set?: Enumerable<ArticleWhereUniqueInput>
+      disconnect?: Enumerable<ArticleWhereUniqueInput>
+      delete?: Enumerable<ArticleWhereUniqueInput>
+      connect?: Enumerable<ArticleWhereUniqueInput>
+      update?: Enumerable<ArticleUpdateWithWhereUniqueWithoutUserInput>
+      updateMany?: Enumerable<ArticleUpdateManyWithWhereWithoutUserInput>
+      deleteMany?: Enumerable<ArticleScalarWhereInput>
    }
 
-   export type UserCreateNestedOneWithoutProjectInput = {
+   export type UserCreateNestedOneWithoutArticleInput = {
       create?: XOR<
-         UserCreateWithoutProjectInput,
-         UserUncheckedCreateWithoutProjectInput
+         UserCreateWithoutArticleInput,
+         UserUncheckedCreateWithoutArticleInput
       >
-      connectOrCreate?: UserCreateOrConnectWithoutProjectInput
+      connectOrCreate?: UserCreateOrConnectWithoutArticleInput
       connect?: UserWhereUniqueInput
    }
 
-   export type UserUpdateOneRequiredWithoutProjectNestedInput = {
+   export type ChapterCreateNestedManyWithoutArticleInput = {
       create?: XOR<
-         UserCreateWithoutProjectInput,
-         UserUncheckedCreateWithoutProjectInput
+         Enumerable<ChapterCreateWithoutArticleInput>,
+         Enumerable<ChapterUncheckedCreateWithoutArticleInput>
       >
-      connectOrCreate?: UserCreateOrConnectWithoutProjectInput
-      upsert?: UserUpsertWithoutProjectInput
+      connectOrCreate?: Enumerable<ChapterCreateOrConnectWithoutArticleInput>
+      createMany?: ChapterCreateManyArticleInputEnvelope
+      connect?: Enumerable<ChapterWhereUniqueInput>
+   }
+
+   export type ChapterUncheckedCreateNestedManyWithoutArticleInput = {
+      create?: XOR<
+         Enumerable<ChapterCreateWithoutArticleInput>,
+         Enumerable<ChapterUncheckedCreateWithoutArticleInput>
+      >
+      connectOrCreate?: Enumerable<ChapterCreateOrConnectWithoutArticleInput>
+      createMany?: ChapterCreateManyArticleInputEnvelope
+      connect?: Enumerable<ChapterWhereUniqueInput>
+   }
+
+   export type UserUpdateOneRequiredWithoutArticleNestedInput = {
+      create?: XOR<
+         UserCreateWithoutArticleInput,
+         UserUncheckedCreateWithoutArticleInput
+      >
+      connectOrCreate?: UserCreateOrConnectWithoutArticleInput
+      upsert?: UserUpsertWithoutArticleInput
       connect?: UserWhereUniqueInput
       update?: XOR<
-         UserUpdateWithoutProjectInput,
-         UserUncheckedUpdateWithoutProjectInput
+         UserUpdateWithoutArticleInput,
+         UserUncheckedUpdateWithoutArticleInput
+      >
+   }
+
+   export type ChapterUpdateManyWithoutArticleNestedInput = {
+      create?: XOR<
+         Enumerable<ChapterCreateWithoutArticleInput>,
+         Enumerable<ChapterUncheckedCreateWithoutArticleInput>
+      >
+      connectOrCreate?: Enumerable<ChapterCreateOrConnectWithoutArticleInput>
+      upsert?: Enumerable<ChapterUpsertWithWhereUniqueWithoutArticleInput>
+      createMany?: ChapterCreateManyArticleInputEnvelope
+      set?: Enumerable<ChapterWhereUniqueInput>
+      disconnect?: Enumerable<ChapterWhereUniqueInput>
+      delete?: Enumerable<ChapterWhereUniqueInput>
+      connect?: Enumerable<ChapterWhereUniqueInput>
+      update?: Enumerable<ChapterUpdateWithWhereUniqueWithoutArticleInput>
+      updateMany?: Enumerable<ChapterUpdateManyWithWhereWithoutArticleInput>
+      deleteMany?: Enumerable<ChapterScalarWhereInput>
+   }
+
+   export type ChapterUncheckedUpdateManyWithoutArticleNestedInput = {
+      create?: XOR<
+         Enumerable<ChapterCreateWithoutArticleInput>,
+         Enumerable<ChapterUncheckedCreateWithoutArticleInput>
+      >
+      connectOrCreate?: Enumerable<ChapterCreateOrConnectWithoutArticleInput>
+      upsert?: Enumerable<ChapterUpsertWithWhereUniqueWithoutArticleInput>
+      createMany?: ChapterCreateManyArticleInputEnvelope
+      set?: Enumerable<ChapterWhereUniqueInput>
+      disconnect?: Enumerable<ChapterWhereUniqueInput>
+      delete?: Enumerable<ChapterWhereUniqueInput>
+      connect?: Enumerable<ChapterWhereUniqueInput>
+      update?: Enumerable<ChapterUpdateWithWhereUniqueWithoutArticleInput>
+      updateMany?: Enumerable<ChapterUpdateManyWithWhereWithoutArticleInput>
+      deleteMany?: Enumerable<ChapterScalarWhereInput>
+   }
+
+   export type ArticleCreateNestedOneWithoutChapterInput = {
+      create?: XOR<
+         ArticleCreateWithoutChapterInput,
+         ArticleUncheckedCreateWithoutChapterInput
+      >
+      connectOrCreate?: ArticleCreateOrConnectWithoutChapterInput
+      connect?: ArticleWhereUniqueInput
+   }
+
+   export type ArticleUpdateOneRequiredWithoutChapterNestedInput = {
+      create?: XOR<
+         ArticleCreateWithoutChapterInput,
+         ArticleUncheckedCreateWithoutChapterInput
+      >
+      connectOrCreate?: ArticleCreateOrConnectWithoutChapterInput
+      upsert?: ArticleUpsertWithoutChapterInput
+      connect?: ArticleWhereUniqueInput
+      update?: XOR<
+         ArticleUpdateWithoutChapterInput,
+         ArticleUncheckedUpdateWithoutChapterInput
       >
    }
 
@@ -3788,20 +6117,6 @@ export namespace Prisma {
       gt?: number
       gte?: number
       not?: NestedIntFilter | number
-   }
-
-   export type NestedStringFilter = {
-      equals?: string
-      in?: Enumerable<string> | string
-      notIn?: Enumerable<string> | string
-      lt?: string
-      lte?: string
-      gt?: string
-      gte?: string
-      contains?: string
-      startsWith?: string
-      endsWith?: string
-      not?: NestedStringFilter | string
    }
 
    export type NestedStringNullableFilter = {
@@ -3818,9 +6133,18 @@ export namespace Prisma {
       not?: NestedStringNullableFilter | string | null
    }
 
-   export type NestedBoolFilter = {
-      equals?: boolean
-      not?: NestedBoolFilter | boolean
+   export type NestedStringFilter = {
+      equals?: string
+      in?: Enumerable<string> | string
+      notIn?: Enumerable<string> | string
+      lt?: string
+      lte?: string
+      gt?: string
+      gte?: string
+      contains?: string
+      startsWith?: string
+      endsWith?: string
+      not?: NestedStringFilter | string
    }
 
    export type NestedDateTimeFilter = {
@@ -3861,23 +6185,6 @@ export namespace Prisma {
       not?: NestedFloatFilter | number
    }
 
-   export type NestedStringWithAggregatesFilter = {
-      equals?: string
-      in?: Enumerable<string> | string
-      notIn?: Enumerable<string> | string
-      lt?: string
-      lte?: string
-      gt?: string
-      gte?: string
-      contains?: string
-      startsWith?: string
-      endsWith?: string
-      not?: NestedStringWithAggregatesFilter | string
-      _count?: NestedIntFilter
-      _min?: NestedStringFilter
-      _max?: NestedStringFilter
-   }
-
    export type NestedStringNullableWithAggregatesFilter = {
       equals?: string | null
       in?: Enumerable<string> | string | null
@@ -3906,12 +6213,21 @@ export namespace Prisma {
       not?: NestedIntNullableFilter | number | null
    }
 
-   export type NestedBoolWithAggregatesFilter = {
-      equals?: boolean
-      not?: NestedBoolWithAggregatesFilter | boolean
+   export type NestedStringWithAggregatesFilter = {
+      equals?: string
+      in?: Enumerable<string> | string
+      notIn?: Enumerable<string> | string
+      lt?: string
+      lte?: string
+      gt?: string
+      gte?: string
+      contains?: string
+      startsWith?: string
+      endsWith?: string
+      not?: NestedStringWithAggregatesFilter | string
       _count?: NestedIntFilter
-      _min?: NestedBoolFilter
-      _max?: NestedBoolFilter
+      _min?: NestedStringFilter
+      _max?: NestedStringFilter
    }
 
    export type NestedDateTimeWithAggregatesFilter = {
@@ -3927,202 +6243,293 @@ export namespace Prisma {
       _min?: NestedDateTimeFilter
       _max?: NestedDateTimeFilter
    }
-   export type NestedJsonNullableFilter =
-      | PatchUndefined<
-           Either<
-              Required<NestedJsonNullableFilterBase>,
-              Exclude<keyof Required<NestedJsonNullableFilterBase>, 'path'>
-           >,
-           Required<NestedJsonNullableFilterBase>
-        >
-      | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase>, 'path'>>
 
-   export type NestedJsonNullableFilterBase = {
-      equals?: InputJsonValue | JsonNullValueFilter
-      path?: string
-      string_contains?: string
-      string_starts_with?: string
-      string_ends_with?: string
-      array_contains?: InputJsonValue | null
-      array_starts_with?: InputJsonValue | null
-      array_ends_with?: InputJsonValue | null
-      lt?: InputJsonValue
-      lte?: InputJsonValue
-      gt?: InputJsonValue
-      gte?: InputJsonValue
-      not?: InputJsonValue | JsonNullValueFilter
-   }
-
-   export type ProjectCreateWithoutUserInput = {
+   export type ArticleCreateWithoutUserInput = {
       name: string
-      pageHtml?: string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: Date | string
       updatedAt?: Date | string
+      chapter?: ChapterCreateNestedManyWithoutArticleInput
    }
 
-   export type ProjectUncheckedCreateWithoutUserInput = {
+   export type ArticleUncheckedCreateWithoutUserInput = {
       id?: number
       name: string
-      pageHtml?: string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: Date | string
       updatedAt?: Date | string
+      chapter?: ChapterUncheckedCreateNestedManyWithoutArticleInput
    }
 
-   export type ProjectCreateOrConnectWithoutUserInput = {
-      where: ProjectWhereUniqueInput
+   export type ArticleCreateOrConnectWithoutUserInput = {
+      where: ArticleWhereUniqueInput
       create: XOR<
-         ProjectCreateWithoutUserInput,
-         ProjectUncheckedCreateWithoutUserInput
+         ArticleCreateWithoutUserInput,
+         ArticleUncheckedCreateWithoutUserInput
       >
    }
 
-   export type ProjectCreateManyUserInputEnvelope = {
-      data: Enumerable<ProjectCreateManyUserInput>
+   export type ArticleCreateManyUserInputEnvelope = {
+      data: Enumerable<ArticleCreateManyUserInput>
       skipDuplicates?: boolean
    }
 
-   export type ProjectUpsertWithWhereUniqueWithoutUserInput = {
-      where: ProjectWhereUniqueInput
+   export type ArticleUpsertWithWhereUniqueWithoutUserInput = {
+      where: ArticleWhereUniqueInput
       update: XOR<
-         ProjectUpdateWithoutUserInput,
-         ProjectUncheckedUpdateWithoutUserInput
+         ArticleUpdateWithoutUserInput,
+         ArticleUncheckedUpdateWithoutUserInput
       >
       create: XOR<
-         ProjectCreateWithoutUserInput,
-         ProjectUncheckedCreateWithoutUserInput
+         ArticleCreateWithoutUserInput,
+         ArticleUncheckedCreateWithoutUserInput
       >
    }
 
-   export type ProjectUpdateWithWhereUniqueWithoutUserInput = {
-      where: ProjectWhereUniqueInput
+   export type ArticleUpdateWithWhereUniqueWithoutUserInput = {
+      where: ArticleWhereUniqueInput
       data: XOR<
-         ProjectUpdateWithoutUserInput,
-         ProjectUncheckedUpdateWithoutUserInput
+         ArticleUpdateWithoutUserInput,
+         ArticleUncheckedUpdateWithoutUserInput
       >
    }
 
-   export type ProjectUpdateManyWithWhereWithoutUserInput = {
-      where: ProjectScalarWhereInput
+   export type ArticleUpdateManyWithWhereWithoutUserInput = {
+      where: ArticleScalarWhereInput
       data: XOR<
-         ProjectUpdateManyMutationInput,
-         ProjectUncheckedUpdateManyWithoutProjectInput
+         ArticleUpdateManyMutationInput,
+         ArticleUncheckedUpdateManyWithoutArticleInput
       >
    }
 
-   export type ProjectScalarWhereInput = {
-      AND?: Enumerable<ProjectScalarWhereInput>
-      OR?: Enumerable<ProjectScalarWhereInput>
-      NOT?: Enumerable<ProjectScalarWhereInput>
+   export type ArticleScalarWhereInput = {
+      AND?: Enumerable<ArticleScalarWhereInput>
+      OR?: Enumerable<ArticleScalarWhereInput>
+      NOT?: Enumerable<ArticleScalarWhereInput>
       id?: IntFilter | number
       name?: StringFilter | string
-      pageHtml?: StringNullableFilter | string | null
-      nodeData?: JsonNullableFilter
-      settings?: JsonNullableFilter
       createdAt?: DateTimeFilter | Date | string
       updatedAt?: DateTimeFilter | Date | string
       userId?: IntFilter | number
    }
 
-   export type UserCreateWithoutProjectInput = {
-      email: string
+   export type UserCreateWithoutArticleInput = {
       username?: string | null
       password: string
-      emailToken: string
-      confirmed?: boolean
+      phoneNumber: string
       createdAt?: Date | string
       updatedAt?: Date | string
    }
 
-   export type UserUncheckedCreateWithoutProjectInput = {
+   export type UserUncheckedCreateWithoutArticleInput = {
       id?: number
-      email: string
       username?: string | null
       password: string
-      emailToken: string
-      confirmed?: boolean
+      phoneNumber: string
       createdAt?: Date | string
       updatedAt?: Date | string
    }
 
-   export type UserCreateOrConnectWithoutProjectInput = {
+   export type UserCreateOrConnectWithoutArticleInput = {
       where: UserWhereUniqueInput
       create: XOR<
-         UserCreateWithoutProjectInput,
-         UserUncheckedCreateWithoutProjectInput
+         UserCreateWithoutArticleInput,
+         UserUncheckedCreateWithoutArticleInput
       >
    }
 
-   export type UserUpsertWithoutProjectInput = {
-      update: XOR<
-         UserUpdateWithoutProjectInput,
-         UserUncheckedUpdateWithoutProjectInput
-      >
-      create: XOR<
-         UserCreateWithoutProjectInput,
-         UserUncheckedCreateWithoutProjectInput
-      >
-   }
-
-   export type UserUpdateWithoutProjectInput = {
-      email?: StringFieldUpdateOperationsInput | string
-      username?: NullableStringFieldUpdateOperationsInput | string | null
-      password?: StringFieldUpdateOperationsInput | string
-      emailToken?: StringFieldUpdateOperationsInput | string
-      confirmed?: BoolFieldUpdateOperationsInput | boolean
-      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-   }
-
-   export type UserUncheckedUpdateWithoutProjectInput = {
-      id?: IntFieldUpdateOperationsInput | number
-      email?: StringFieldUpdateOperationsInput | string
-      username?: NullableStringFieldUpdateOperationsInput | string | null
-      password?: StringFieldUpdateOperationsInput | string
-      emailToken?: StringFieldUpdateOperationsInput | string
-      confirmed?: BoolFieldUpdateOperationsInput | boolean
-      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-   }
-
-   export type ProjectCreateManyUserInput = {
-      id?: number
+   export type ChapterCreateWithoutArticleInput = {
       name: string
-      pageHtml?: string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
       createdAt?: Date | string
       updatedAt?: Date | string
    }
 
-   export type ProjectUpdateWithoutUserInput = {
-      name?: StringFieldUpdateOperationsInput | string
-      pageHtml?: NullableStringFieldUpdateOperationsInput | string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
+   export type ChapterUncheckedCreateWithoutArticleInput = {
+      id?: number
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+   }
+
+   export type ChapterCreateOrConnectWithoutArticleInput = {
+      where: ChapterWhereUniqueInput
+      create: XOR<
+         ChapterCreateWithoutArticleInput,
+         ChapterUncheckedCreateWithoutArticleInput
+      >
+   }
+
+   export type ChapterCreateManyArticleInputEnvelope = {
+      data: Enumerable<ChapterCreateManyArticleInput>
+      skipDuplicates?: boolean
+   }
+
+   export type UserUpsertWithoutArticleInput = {
+      update: XOR<
+         UserUpdateWithoutArticleInput,
+         UserUncheckedUpdateWithoutArticleInput
+      >
+      create: XOR<
+         UserCreateWithoutArticleInput,
+         UserUncheckedCreateWithoutArticleInput
+      >
+   }
+
+   export type UserUpdateWithoutArticleInput = {
+      username?: NullableStringFieldUpdateOperationsInput | string | null
+      password?: StringFieldUpdateOperationsInput | string
+      phoneNumber?: StringFieldUpdateOperationsInput | string
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
    }
 
-   export type ProjectUncheckedUpdateWithoutUserInput = {
+   export type UserUncheckedUpdateWithoutArticleInput = {
       id?: IntFieldUpdateOperationsInput | number
-      name?: StringFieldUpdateOperationsInput | string
-      pageHtml?: NullableStringFieldUpdateOperationsInput | string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
+      username?: NullableStringFieldUpdateOperationsInput | string | null
+      password?: StringFieldUpdateOperationsInput | string
+      phoneNumber?: StringFieldUpdateOperationsInput | string
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
    }
 
-   export type ProjectUncheckedUpdateManyWithoutProjectInput = {
+   export type ChapterUpsertWithWhereUniqueWithoutArticleInput = {
+      where: ChapterWhereUniqueInput
+      update: XOR<
+         ChapterUpdateWithoutArticleInput,
+         ChapterUncheckedUpdateWithoutArticleInput
+      >
+      create: XOR<
+         ChapterCreateWithoutArticleInput,
+         ChapterUncheckedCreateWithoutArticleInput
+      >
+   }
+
+   export type ChapterUpdateWithWhereUniqueWithoutArticleInput = {
+      where: ChapterWhereUniqueInput
+      data: XOR<
+         ChapterUpdateWithoutArticleInput,
+         ChapterUncheckedUpdateWithoutArticleInput
+      >
+   }
+
+   export type ChapterUpdateManyWithWhereWithoutArticleInput = {
+      where: ChapterScalarWhereInput
+      data: XOR<
+         ChapterUpdateManyMutationInput,
+         ChapterUncheckedUpdateManyWithoutChapterInput
+      >
+   }
+
+   export type ChapterScalarWhereInput = {
+      AND?: Enumerable<ChapterScalarWhereInput>
+      OR?: Enumerable<ChapterScalarWhereInput>
+      NOT?: Enumerable<ChapterScalarWhereInput>
+      id?: IntFilter | number
+      name?: StringFilter | string
+      createdAt?: DateTimeFilter | Date | string
+      updatedAt?: DateTimeFilter | Date | string
+      articleId?: IntFilter | number
+   }
+
+   export type ArticleCreateWithoutChapterInput = {
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+      user: UserCreateNestedOneWithoutArticleInput
+   }
+
+   export type ArticleUncheckedCreateWithoutChapterInput = {
+      id?: number
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+      userId: number
+   }
+
+   export type ArticleCreateOrConnectWithoutChapterInput = {
+      where: ArticleWhereUniqueInput
+      create: XOR<
+         ArticleCreateWithoutChapterInput,
+         ArticleUncheckedCreateWithoutChapterInput
+      >
+   }
+
+   export type ArticleUpsertWithoutChapterInput = {
+      update: XOR<
+         ArticleUpdateWithoutChapterInput,
+         ArticleUncheckedUpdateWithoutChapterInput
+      >
+      create: XOR<
+         ArticleCreateWithoutChapterInput,
+         ArticleUncheckedCreateWithoutChapterInput
+      >
+   }
+
+   export type ArticleUpdateWithoutChapterInput = {
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      user?: UserUpdateOneRequiredWithoutArticleNestedInput
+   }
+
+   export type ArticleUncheckedUpdateWithoutChapterInput = {
       id?: IntFieldUpdateOperationsInput | number
       name?: StringFieldUpdateOperationsInput | string
-      pageHtml?: NullableStringFieldUpdateOperationsInput | string | null
-      nodeData?: NullableJsonNullValueInput | InputJsonValue
-      settings?: NullableJsonNullValueInput | InputJsonValue
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      userId?: IntFieldUpdateOperationsInput | number
+   }
+
+   export type ArticleCreateManyUserInput = {
+      id?: number
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+   }
+
+   export type ArticleUpdateWithoutUserInput = {
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      chapter?: ChapterUpdateManyWithoutArticleNestedInput
+   }
+
+   export type ArticleUncheckedUpdateWithoutUserInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      chapter?: ChapterUncheckedUpdateManyWithoutArticleNestedInput
+   }
+
+   export type ArticleUncheckedUpdateManyWithoutArticleInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type ChapterCreateManyArticleInput = {
+      id?: number
+      name: string
+      createdAt?: Date | string
+      updatedAt?: Date | string
+   }
+
+   export type ChapterUpdateWithoutArticleInput = {
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type ChapterUncheckedUpdateWithoutArticleInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      name?: StringFieldUpdateOperationsInput | string
+      createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+      updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+   }
+
+   export type ChapterUncheckedUpdateManyWithoutChapterInput = {
+      id?: IntFieldUpdateOperationsInput | number
+      name?: StringFieldUpdateOperationsInput | string
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
    }

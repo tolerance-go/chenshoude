@@ -9,7 +9,7 @@ const authRouter = express.Router()
 // 设置登录路由，使用 Passport 进行认证
 authRouter.post('/login', passport.authenticate('local'), (req, res) => {
    const user = req.user
-   res.send(`Hello, ${user!.username || user!.email}!`)
+   res.send(`Hello, ${user!.username}!`)
 })
 
 // 使用 passport 登出

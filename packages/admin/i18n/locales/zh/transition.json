@@ -14,12 +14,12 @@
          "required": "用户名/邮箱是必填项"
       },
       "accountPlaceholder": "请输入用户名/邮箱",
-      "emailLabel": "邮箱",
+      "pnLabel": "邮箱",
       "passwordLabel": "密码",
-      "emailPlaceholder": "请输入邮箱",
+      "pnPlaceholder": "请输入邮箱",
       "passwordPlaceholder": "请输入密码",
       "forgetPassword": "忘记密码？",
-      "emailErrorMessages": {
+      "pnErrorMessages": {
          "required": "邮箱是必填项"
       },
       "passwordErrorMessages": {

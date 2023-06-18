@@ -13,24 +13,37 @@ datasource db {
 
 model User {
   id          Int       @id @default(autoincrement())
-  email       String    @unique
   username    String?   @unique
   password    String
-  emailToken  String    @unique
-  confirmed   Boolean   @default(false)
+  phoneNumber String    @unique
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  project     Project[]
+  article     Article[]
 }
 
-model Project {
+model VerificationCode {
+  id          Int      @id @default(autoincrement())
+  phoneNumber String   @unique
+  code        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Article {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  chapter   Chapter[]
+}
+
+model Chapter {
   id        Int      @id @default(autoincrement())
   name      String   @unique
-  pageHtml  String?  @db.LongText
-  nodeData  Json?
-  settings  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  articleId Int
+  article   Article  @relation(fields: [articleId], references: [id])
 }
