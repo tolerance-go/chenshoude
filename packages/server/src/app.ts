@@ -23,7 +23,7 @@ import { Strategy as LocalStrategy } from 'passport-local'
 import { authRouter } from './routers/authRouter'
 
 // import { projectRouter } from './routers/projectRouter'
-import { registerRouter } from './routers/registerRouter'
+import { registerRouter } from './routers/registerEmailRouter'
 
 import { EXPRESS_SESSION_SID } from '@chenshoude-admin/common/dist/constants'
 import cookieParser from 'cookie-parser'

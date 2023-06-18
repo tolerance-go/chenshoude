@@ -9,9 +9,9 @@ import { HttpError } from '../errors'
 import { catchErrorReturnHttp500 } from '../utils/catchErrors'
 import { hashPassword } from '../utils/hashPassword'
 
-const registerRouter = express.Router()
+const registerEmailRouter = express.Router()
 
-registerRouter.post(
+registerEmailRouter.post(
    '/register',
    catchErrorReturnHttp500(async (req, res) => {
       const user = req.body
@@ -130,7 +130,7 @@ registerRouter.post(
  * 如果 token 有效，就会更新用户的 confirmed 字段，并且重定向到首页
  * 如果 token 无效，就会返回 404
  */
-registerRouter.get(
+registerEmailRouter.get(
    '/confirm/:email/:token',
    catchErrorReturnHttp500(async (req, res) => {
       const { token, email } = req.params
@@ -186,4 +186,4 @@ registerRouter.get(
    }),
 )
 
-export { registerRouter }
+export { registerEmailRouter as registerRouter }
