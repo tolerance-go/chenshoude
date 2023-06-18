@@ -17,7 +17,6 @@ model User {
   username    String?   @unique
   password    String
   emailToken  String    @unique
-  pluginToken String    @unique
   confirmed   Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

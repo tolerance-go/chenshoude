@@ -5,7 +5,7 @@ import {
    LanguageContextType,
 } from '@/components/LanguageContext'
 
-export const Body = ({
+export const LanguageContextWrapper = ({
    children,
    lng,
    dir: dir_,

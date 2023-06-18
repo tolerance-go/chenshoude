@@ -1,8 +1,8 @@
 import prisma from '@chenshoude-admin/db'
 import express from 'express'
 import passport from 'passport'
-import { pluginAuthenticate } from '../middleware/pluginAuthenticate'
-import { catchErrors } from '../utils/catchErrors'
+// import { pluginAuthenticate } from '../middleware/pluginAuthenticate'
+import { catchErrorReturnHttp500 } from '../utils/catchErrors'
 
 const authRouter = express.Router()
 
@@ -25,7 +25,7 @@ authRouter.post('/logout', (req, res, next) => {
 // 设置一个路由来获取所有用户
 authRouter.get(
    '/users',
-   catchErrors(async (req, res) => {
+   catchErrorReturnHttp500(async (req, res) => {
       const users = await prisma.user.findMany()
       res.json(users)
    }),
@@ -48,7 +48,7 @@ authRouter.get(
 // 设置一个路由来更新用户
 authRouter.put(
    '/users/:id',
-   catchErrors(async (req, res) => {
+   catchErrorReturnHttp500(async (req, res) => {
       if (!req.user) {
          throw new Error('No session found')
       }
@@ -71,7 +71,7 @@ authRouter.put(
 // 设置一个路由来删除用户
 authRouter.delete(
    '/users/:id',
-   catchErrors(async (req, res) => {
+   catchErrorReturnHttp500(async (req, res) => {
       const deletedUser = await prisma.user.delete({
          where: { id: parseInt(req.params.id) },
       })
@@ -82,7 +82,7 @@ authRouter.delete(
 // 使用 session 来获取当前用户
 authRouter.get(
    '/users/session',
-   catchErrors(async (req, res) => {
+   catchErrorReturnHttp500(async (req, res) => {
       if (req.user) {
          res.json(req.user)
          return
@@ -91,9 +91,9 @@ authRouter.get(
    }),
 )
 
-// 使用插件的 token 获取用户信息
-authRouter.post('/get-user-by-token', pluginAuthenticate, (req, res) => {
-   res.json(req.user)
-})
+// // 使用插件的 token 获取用户信息
+// authRouter.post('/get-user-by-token', pluginAuthenticate, (req, res) => {
+//    res.json(req.user)
+// })
 
 export { authRouter }

@@ -8,7 +8,10 @@ type AsyncRequestHandler = (
 ) => Promise<any>
 
 // 使用 AsyncRequestHandler 类型作为参数的 wrapAsync 中间件
-export const catchErrors = (fn: AsyncRequestHandler): RequestHandler => {
+// 兜底函数，不会让程序崩溃而是返回 500 错误信息
+export const catchErrorReturnHttp500 = (
+   fn: AsyncRequestHandler,
+): RequestHandler => {
    return (req, res, next) => {
       fn(req, res, next).catch((err) => next(err))
    }

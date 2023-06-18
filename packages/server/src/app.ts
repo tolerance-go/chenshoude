@@ -32,6 +32,7 @@ import { viewsRouter } from './routers/viewsRouter'
 import { validatePassword } from './utils/hashPassword'
 
 import i18n from 'i18n'
+import { HttpError } from './errors'
 import { openaiRouter } from './routers/openaiRouter'
 
 i18n.configure({
@@ -167,6 +168,13 @@ app.get('/', (req, res) => res.send(req.__('hi')))
 // 必须在所有路由之后设置错误处理中间件
 // 错误处理中间件
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+   /**
+    * 如果 Error 继承自 HttpError，那么就返回 HttpError 中的 status 和 message
+    */
+   if (err instanceof HttpError) {
+      return res.status(err.status).send(err.message)
+   }
+
    console.error(err.stack) // 在控制台打印错误堆栈跟踪
    res.status(500).send(err.message) // 发送 500 响应
 })

@@ -1,12 +1,12 @@
 import prisma from '@chenshoude-admin/db'
 import express from 'express'
-import { catchErrors } from '../utils/catchErrors'
+import { catchErrorReturnHttp500 } from '../utils/catchErrors'
 
 const viewsRouter = express.Router()
 
 viewsRouter.get(
    '/views/:id',
-   catchErrors(async function (req, res) {
+   catchErrorReturnHttp500(async function (req, res) {
       if (!req.user) {
          throw new Error('Unauthorized')
       }

@@ -1,5 +1,5 @@
 import { I18nLng } from '@/i18n/types'
-import { AuthWrapper } from '../AuthWrapper'
+import { UserContextWrapper } from '../UserContextWrapper'
 import { Aside } from './Aside'
 import { Header } from './Header'
 
@@ -13,7 +13,7 @@ export default function RootLayout({
    }
 }) {
    return (
-      <AuthWrapper>
+      <UserContextWrapper>
          <div className='flex w-full bg-gray-100 min-h-screen'>
             <div className='flex w-full bg-gray-100 min-h-screen'>
                <Aside />
@@ -23,6 +23,6 @@ export default function RootLayout({
                </div>
             </div>
          </div>
-      </AuthWrapper>
+      </UserContextWrapper>
    )
 }

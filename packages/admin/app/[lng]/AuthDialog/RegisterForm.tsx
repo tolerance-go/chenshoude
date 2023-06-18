@@ -30,7 +30,6 @@ export const RegisterForm = ({
          </h1>
          <form
             onSubmit={handleSubmit(async (data) => {
-               debugger
                setIsLoading(true)
                const { confirmPassword, ...rest } = data
                try {

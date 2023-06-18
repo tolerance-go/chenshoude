@@ -24,7 +24,6 @@ export type User = {
    username: string | null
    password: string
    emailToken: string
-   pluginToken: string
    confirmed: boolean
    createdAt: Date
    updatedAt: Date
@@ -986,7 +985,6 @@ export namespace Prisma {
       username: string | null
       password: string | null
       emailToken: string | null
-      pluginToken: string | null
       confirmed: boolean | null
       createdAt: Date | null
       updatedAt: Date | null
@@ -998,7 +996,6 @@ export namespace Prisma {
       username: string | null
       password: string | null
       emailToken: string | null
-      pluginToken: string | null
       confirmed: boolean | null
       createdAt: Date | null
       updatedAt: Date | null
@@ -1010,7 +1007,6 @@ export namespace Prisma {
       username: number
       password: number
       emailToken: number
-      pluginToken: number
       confirmed: number
       createdAt: number
       updatedAt: number
@@ -1031,7 +1027,6 @@ export namespace Prisma {
       username?: true
       password?: true
       emailToken?: true
-      pluginToken?: true
       confirmed?: true
       createdAt?: true
       updatedAt?: true
@@ -1043,7 +1038,6 @@ export namespace Prisma {
       username?: true
       password?: true
       emailToken?: true
-      pluginToken?: true
       confirmed?: true
       createdAt?: true
       updatedAt?: true
@@ -1055,7 +1049,6 @@ export namespace Prisma {
       username?: true
       password?: true
       emailToken?: true
-      pluginToken?: true
       confirmed?: true
       createdAt?: true
       updatedAt?: true
@@ -1151,7 +1144,6 @@ export namespace Prisma {
       username: string | null
       password: string
       emailToken: string
-      pluginToken: string
       confirmed: boolean
       createdAt: Date
       updatedAt: Date
@@ -1180,7 +1172,6 @@ export namespace Prisma {
       username?: boolean
       password?: boolean
       emailToken?: boolean
-      pluginToken?: boolean
       confirmed?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -3118,7 +3109,6 @@ export namespace Prisma {
       username: 'username'
       password: 'password'
       emailToken: 'emailToken'
-      pluginToken: 'pluginToken'
       confirmed: 'confirmed'
       createdAt: 'createdAt'
       updatedAt: 'updatedAt'
@@ -3140,7 +3130,6 @@ export namespace Prisma {
       username?: StringNullableFilter | string | null
       password?: StringFilter | string
       emailToken?: StringFilter | string
-      pluginToken?: StringFilter | string
       confirmed?: BoolFilter | boolean
       createdAt?: DateTimeFilter | Date | string
       updatedAt?: DateTimeFilter | Date | string
@@ -3153,7 +3142,6 @@ export namespace Prisma {
       username?: SortOrder
       password?: SortOrder
       emailToken?: SortOrder
-      pluginToken?: SortOrder
       confirmed?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
@@ -3165,7 +3153,6 @@ export namespace Prisma {
       email?: string
       username?: string
       emailToken?: string
-      pluginToken?: string
    }
 
    export type UserOrderByWithAggregationInput = {
@@ -3174,7 +3161,6 @@ export namespace Prisma {
       username?: SortOrder
       password?: SortOrder
       emailToken?: SortOrder
-      pluginToken?: SortOrder
       confirmed?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
@@ -3194,7 +3180,6 @@ export namespace Prisma {
       username?: StringNullableWithAggregatesFilter | string | null
       password?: StringWithAggregatesFilter | string
       emailToken?: StringWithAggregatesFilter | string
-      pluginToken?: StringWithAggregatesFilter | string
       confirmed?: BoolWithAggregatesFilter | boolean
       createdAt?: DateTimeWithAggregatesFilter | Date | string
       updatedAt?: DateTimeWithAggregatesFilter | Date | string
@@ -3267,7 +3252,6 @@ export namespace Prisma {
       username?: string | null
       password: string
       emailToken: string
-      pluginToken: string
       confirmed?: boolean
       createdAt?: Date | string
       updatedAt?: Date | string
@@ -3280,7 +3264,6 @@ export namespace Prisma {
       username?: string | null
       password: string
       emailToken: string
-      pluginToken: string
       confirmed?: boolean
       createdAt?: Date | string
       updatedAt?: Date | string
@@ -3292,7 +3275,6 @@ export namespace Prisma {
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
       emailToken?: StringFieldUpdateOperationsInput | string
-      pluginToken?: StringFieldUpdateOperationsInput | string
       confirmed?: BoolFieldUpdateOperationsInput | boolean
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3305,7 +3287,6 @@ export namespace Prisma {
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
       emailToken?: StringFieldUpdateOperationsInput | string
-      pluginToken?: StringFieldUpdateOperationsInput | string
       confirmed?: BoolFieldUpdateOperationsInput | boolean
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3318,7 +3299,6 @@ export namespace Prisma {
       username?: string | null
       password: string
       emailToken: string
-      pluginToken: string
       confirmed?: boolean
       createdAt?: Date | string
       updatedAt?: Date | string
@@ -3329,7 +3309,6 @@ export namespace Prisma {
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
       emailToken?: StringFieldUpdateOperationsInput | string
-      pluginToken?: StringFieldUpdateOperationsInput | string
       confirmed?: BoolFieldUpdateOperationsInput | boolean
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3341,7 +3320,6 @@ export namespace Prisma {
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
       emailToken?: StringFieldUpdateOperationsInput | string
-      pluginToken?: StringFieldUpdateOperationsInput | string
       confirmed?: BoolFieldUpdateOperationsInput | boolean
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -3491,7 +3469,6 @@ export namespace Prisma {
       username?: SortOrder
       password?: SortOrder
       emailToken?: SortOrder
-      pluginToken?: SortOrder
       confirmed?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
@@ -3507,7 +3484,6 @@ export namespace Prisma {
       username?: SortOrder
       password?: SortOrder
       emailToken?: SortOrder
-      pluginToken?: SortOrder
       confirmed?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
@@ -3519,7 +3495,6 @@ export namespace Prisma {
       username?: SortOrder
       password?: SortOrder
       emailToken?: SortOrder
-      pluginToken?: SortOrder
       confirmed?: SortOrder
       createdAt?: SortOrder
       updatedAt?: SortOrder
@@ -4057,7 +4032,6 @@ export namespace Prisma {
       username?: string | null
       password: string
       emailToken: string
-      pluginToken: string
       confirmed?: boolean
       createdAt?: Date | string
       updatedAt?: Date | string
@@ -4069,7 +4043,6 @@ export namespace Prisma {
       username?: string | null
       password: string
       emailToken: string
-      pluginToken: string
       confirmed?: boolean
       createdAt?: Date | string
       updatedAt?: Date | string
@@ -4099,7 +4072,6 @@ export namespace Prisma {
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
       emailToken?: StringFieldUpdateOperationsInput | string
-      pluginToken?: StringFieldUpdateOperationsInput | string
       confirmed?: BoolFieldUpdateOperationsInput | boolean
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -4111,7 +4083,6 @@ export namespace Prisma {
       username?: NullableStringFieldUpdateOperationsInput | string | null
       password?: StringFieldUpdateOperationsInput | string
       emailToken?: StringFieldUpdateOperationsInput | string
-      pluginToken?: StringFieldUpdateOperationsInput | string
       confirmed?: BoolFieldUpdateOperationsInput | boolean
       createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
       updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
