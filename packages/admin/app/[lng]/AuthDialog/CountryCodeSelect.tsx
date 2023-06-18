@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import countriesList from 'countries-list'
 import { useEffect, useRef, useState } from 'react'
+import { useLatest } from 'react-use'
 
 // 定义 countries 元素类型
 type Country = {
@@ -51,7 +52,15 @@ function useClickAway(
    }, [])
 }
 
-export default function Example({ onSelected }: { onSelected?: () => void }) {
+export default function CountryCodeSelect({
+   onSelected,
+   value,
+   onChange,
+}: {
+   onSelected?: () => void
+   value: string
+   onChange: (value: string) => void
+}) {
    const [selected, setSelected] = useState<Country | undefined>(
       china ?? countries[0],
    )
@@ -66,7 +75,11 @@ export default function Example({ onSelected }: { onSelected?: () => void }) {
    // dropdown ref
    const dropdownRef = useRef<HTMLDivElement>(null)
 
-   console.log('selected?.number', selected)
+   const onChangeLatest = useLatest(onChange)
+
+   useEffect(() => {
+      onChangeLatest.current(selected?.number ?? '')
+   }, [selected, onChangeLatest])
 
    // blur 处理事件
    useClickAway(() => {

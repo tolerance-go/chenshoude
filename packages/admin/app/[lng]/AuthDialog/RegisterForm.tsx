@@ -2,26 +2,17 @@
 
 import AuthModalButton from '@/components/AuthModalButton'
 import { useLanguageContext } from '@/components/LanguageContext'
+import { mergeRefs } from '@/utils/mergeRefs'
 import request from '@/utils/request'
+import { getPhoneNumberRegex } from '@/utils/validatePhoneNumber'
 import { encryptPassword } from '@chenshoude-admin/encrypt-password'
-import { useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useEffect, useRef, useState } from 'react'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-toastify'
+import { useLatest } from 'react-use'
 import { useTranslation } from '../../../i18n/client'
 import CountryCodeSelect from './CountryCodeSelect'
 import { SendMsgBtn } from './SendMsgBtn'
-
-function mergeRefs<T>(...refs: React.Ref<T>[]): React.RefCallback<T> {
-   return (value: T) => {
-      refs.forEach((ref) => {
-         if (typeof ref === 'function') {
-            ref(value)
-         } else if (ref != null) {
-            ;(ref as React.MutableRefObject<T>).current = value
-         }
-      })
-   }
-}
 
 export const RegisterForm = ({
    setIsLogin,
@@ -31,8 +22,15 @@ export const RegisterForm = ({
    const {
       register,
       handleSubmit,
-      formState: { errors },
-   } = useForm()
+      formState: { errors, dirtyFields },
+      control,
+
+      trigger,
+   } = useForm({
+      defaultValues: {
+         countryCode: '86',
+      },
+   })
    const [isLoading, setIsLoading] = useState(false)
    const { lng } = useLanguageContext()
    const { t } = useTranslation(lng)
@@ -40,10 +38,25 @@ export const RegisterForm = ({
    // 电话号码 input ref
    const phoneNumberRef = useRef<HTMLInputElement>(null)
 
+   const countryCode = useWatch({
+      control,
+      name: 'countryCode',
+   })
+
+   const dirtyFieldsLatest = useLatest(dirtyFields)
+
+   useEffect(() => {
+      if (dirtyFieldsLatest.current.phoneNumber) {
+         trigger('phoneNumber') // 当 a 字段变化时，重新出发 b 字段的验证
+      }
+   }, [countryCode])
+
+   console.log('countryCode', countryCode)
+
    const { ref: phoneRef, ...phoneNumberParams } = register('phoneNumber', {
       required: '手机号不能为空',
       pattern: {
-         value: /^\+(?:[0-9]●?){6,14}[0-9]$/,
+         value: getPhoneNumberRegex(countryCode),
          message: '手机号码格式不正确',
       },
    })
@@ -55,6 +68,7 @@ export const RegisterForm = ({
          </h1>
          <form
             onSubmit={handleSubmit(async (data) => {
+               console.log('data', data)
                setIsLoading(true)
                const { confirmPassword, ...rest } = data
                try {
@@ -77,10 +91,18 @@ export const RegisterForm = ({
             <div>
                <label className='block text-gray-700'>手机号</label>
                <div className='flex gap-2 mt-2'>
-                  <CountryCodeSelect
-                     onSelected={() => {
-                        phoneNumberRef.current?.focus()
-                     }}
+                  <Controller
+                     name='countryCode'
+                     control={control}
+                     render={({ field }) => (
+                        <CountryCodeSelect
+                           value={field.value}
+                           onChange={field.onChange}
+                           onSelected={() => {
+                              phoneNumberRef.current?.focus()
+                           }}
+                        />
+                     )}
                   />
                   <input
                      ref={mergeRefs(phoneNumberRef, phoneRef)}
@@ -90,7 +112,7 @@ export const RegisterForm = ({
                      autoFocus
                      {...phoneNumberParams}
                   />
-                  <SendMsgBtn></SendMsgBtn>
+                  <SendMsgBtn control={control}></SendMsgBtn>
                </div>
                {errors.phoneNumber && (
                   <p className='pt-1 text-gray-700'>
